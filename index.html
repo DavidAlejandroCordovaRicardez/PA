@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro de Actividades</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:Arial,sans-serif;font-size:13px;background:#f0f0f0;color:#222;}
+
+    header{background:#1a5c2a;color:white;padding:10px 20px;display:flex;align-items:center;gap:14px;}
+    .logo{width:50px;height:50px;background:white;border-radius:50%;display:flex;align-items:center;
+          justify-content:center;font-weight:bold;color:#1a5c2a;font-size:11px;text-align:center;flex-shrink:0;}
+    header h1{font-size:19px;letter-spacing:1px;}
+    header p{font-size:11px;opacity:.85;margin-top:2px;}
+
+    .main{max-width:1100px;margin:15px auto;padding:0 15px;}
+    .panel-top{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:0;}
+
+    /* CALENDARIO */
+    .calendario{background:#fff;border:1px solid #ccc;border-radius:4px;flex:1;min-width:480px;}
+    .cal-nav{background:#e8e8e8;display:flex;align-items:center;gap:8px;
+             padding:5px 10px;border-bottom:1px solid #ccc;}
+    .cal-nav .mes{font-weight:bold;font-size:13px;min-width:170px;text-align:center;}
+    .cal-dias{display:grid;grid-template-columns:repeat(7,1fr);}
+    .dh{background:#1a5c2a;color:white;text-align:center;padding:5px 2px;font-size:12px;font-weight:bold;}
+    .dc{text-align:center;padding:7px 2px;cursor:pointer;border-top:1px solid #eee;
+        font-size:12px;transition:background .15s;user-select:none;}
+    .dc:hover{background:#d4edda;}
+    .dc.hoy{background:#1a5c2a;color:white;font-weight:bold;border-radius:3px;}
+    .dc.sel{background:#ffd700;font-weight:bold;border-radius:3px;}
+    .dc.tiene::after{content:'●';display:block;font-size:8px;color:#1a5c2a;margin-top:1px;}
+    .dc.hoy.tiene::after,.dc.sel.tiene::after{color:white;}
+
+    /* PANEL IMPRIMIR */
+    .p-imp{background:#fff;border:1px solid #ccc;border-radius:4px;padding:12px;min-width:210px;}
+    .p-imp h3{font-size:12px;color:#1a5c2a;margin-bottom:8px;
+              border-bottom:1px solid #ddd;padding-bottom:4px;}
+    .p-imp label{font-size:12px;display:block;margin-bottom:3px;}
+    .p-imp input[type=date]{width:100%;padding:4px;border:1px solid #ccc;
+                            border-radius:3px;font-size:12px;margin-bottom:8px;}
+
+    /* AGENDA */
+    .agenda-hdr{background:#1a5c2a;color:white;padding:7px 12px;margin-top:12px;
+                display:flex;justify-content:space-between;align-items:center;
+                border-radius:4px 4px 0 0;}
+    .agenda-hdr span{font-size:13px;font-weight:bold;}
+
+    /* TABLA */
+    .twrap{background:#fff;border:1px solid #ccc;border-top:none;
+           border-radius:0 0 4px 4px;overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;}
+    thead tr{background:#1a5c2a;color:white;}
+    thead th{padding:6px 8px;text-align:center;font-size:12px;}
+    tbody tr:nth-child(even){background:#f7f7f7;}
+    tbody tr:hover{background:#e8f5e9;}
+    tbody td{padding:6px 8px;font-size:12px;vertical-align:middle;border-bottom:1px solid #eee;}
+    .td-desc{max-width:340px;}
+    .badge{display:inline-block;background:#d4edda;color:#155724;
+           border-radius:10px;padding:2px 9px;font-size:11px;}
+    .vacio{text-align:center;color:#888;padding:22px;font-style:italic;}
+
+    /* BOTONES */
+    .btn{border:none;border-radius:3px;cursor:pointer;padding:5px 13px;font-size:12px;}
+    .bv{background:#1a5c2a;color:white;font-weight:bold;}
+    .bv:hover{background:#145022;}
+    .ba{background:#ffd700;color:#222;font-weight:bold;}
+    .ba:hover{background:#e6c200;}
+    .bg{background:#888;color:white;}
+    .br{background:#c0392b;color:white;font-size:11px;padding:3px 8px;}
+    .br:hover{background:#a93226;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PA</div>
+  <div>
+    <h1>PROCURADURÍA AGRARIA</h1>
+    <p>DESARROLLO TERRITORIAL — Registro de Agenda y Actividades</p>
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="panel-top">
+
+    <!-- CALENDARIO SEMANAL -->
+    <div class="calendario">
+      <div class="cal-nav">
+        <button class="btn bg" onclick="cambiarSemana(-1)">◀ Anterior</button>
+        <span class="mes" id="calMes"></span>
+        <button class="btn bg" onclick="cambiarSemana(1)">Siguiente ▶</button>
+        <button class="btn bv" style="margin-left:auto" onclick="irHoy()">HOY</button>
+      </div>
+      <div class="cal-dias" id="calDias"></div>
+    </div>
+
+    <!-- PANEL IMPRIMIR -->
+    <div class="p-imp">
+      <h3>🖨 Rango para imprimir</h3>
+      <label>Del:</label>
+      <input type="date" id="impDesde"/>
+      <label>Al:</label>
+      <input type="date" id="impHasta"/>
+      <button class="btn bv" style="width:100%;margin-top:2px"
+              onclick="irImprimir()">IMPRIMIR / DESCARGAR</button>
+    </div>
+
+  </div>
+
+  <!-- AGENDA DEL DÍA -->
+  <div class="agenda-hdr">
+    <span id="agendaTitulo">Agenda del día — selecciona una fecha</span>
+    <a href="agregar.html" class="btn ba" style="text-decoration:none">
+      + Agregar actividad
+    </a>
+  </div>
+  <div class="twrap">
+    <table>
+      <thead>
+        <tr>
+          <th>INICIO</th><th>TÉRMINO</th><th>ACTIVIDAD</th>
+          <th class="td-desc">DESCRIPCIÓN</th>
+          <th>CAMIONETA</th><th>FOLIO</th><th>PLACAS</th>
+          <th>RESULTADO</th><th>ELIMINAR</th>
+        </tr>
+      </thead>
+      <tbody id="tablaBody">
+        <tr><td colspan="9" class="vacio">Selecciona un día del calendario.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+const DB = {
+  getAll(){ return JSON.parse(localStorage.getItem('pa_actividades')||'{}'); },
+  getFecha(f){ return this.getAll()[f]||[]; },
+  save(act){
+    const db=this.getAll();
+    if(!db[act.fecha]) db[act.fecha]=[];
+    act.id=Date.now();
+    act.timestamp=new Date().toLocaleString('es-MX');
+    db[act.fecha].push(act);
+    db[act.fecha].sort((a,b)=>a.inicio.localeCompare(b.inicio));
+    localStorage.setItem('pa_actividades',JSON.stringify(db));
+    return act;
+  },
+  delete(fecha,id){
+    const db=this.getAll();
+    if(db[fecha]) db[fecha]=db[fecha].filter(a=>a.id!==id);
+    localStorage.setItem('pa_actividades',JSON.stringify(db));
+  },
+  fechasConActividad(){
+    const db=this.getAll();
+    return Object.keys(db).filter(f=>db[f].length>0);
+  },
+  getRango(desde,hasta){
+    const db=this.getAll(); const res=[];
+    let cur=parseFecha(desde); const fin=parseFecha(hasta);
+    while(cur<=fin){
+      const f=fmtFecha(cur);
+      if(db[f]?.length) res.push({fecha:f,lista:db[f]});
+      cur.setDate(cur.getDate()+1);
+    }
+    return res;
+  }
+};
+
+function fmtFecha(d){return d.toISOString().split('T')[0];}
+function parseFecha(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);}
+function labelLargo(s){
+  return parseFecha(s).toLocaleDateString('es-MX',
+    {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+
+let semanaOffset=0;
+let fechaActiva=fmtFecha(new Date());
+const DIAS_HDR=['LUN','MAR','MIÉ','JUE','VIE','SÁB','DOM'];
+
+function inicioSemana(ref){
+  const d=new Date(ref); const dow=d.getDay();
+  d.setDate(d.getDate()+(dow===0?-6:1-dow)); return d;
+}
+
+function renderCal(){
+  const hoy=new Date(); const base=new Date(hoy);
+  base.setDate(base.getDate()+semanaOffset*7);
+  const lun=inicioSemana(base);
+  const fin=new Date(lun); fin.setDate(fin.getDate()+6);
+  const mL=lun.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
+  const mF=fin.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
+  document.getElementById('calMes').textContent=
+    (mL===mF?mL:mL+' / '+mF).replace(/^\w/,c=>c.toUpperCase());
+  const activas=DB.fechasConActividad();
+  const cont=document.getElementById('calDias');
+  cont.innerHTML='';
+  DIAS_HDR.forEach(d=>{
+    const h=document.createElement('div');
+    h.className='dh'; h.textContent=d; cont.appendChild(h);
+  });
+  for(let i=0;i<7;i++){
+    const d=new Date(lun); d.setDate(d.getDate()+i);
+    const fStr=fmtFecha(d);
+    const c=document.createElement('div');
+    c.className='dc'; c.textContent=d.getDate();
+    if(fStr===fmtFecha(hoy)) c.classList.add('hoy');
+    if(fStr===fechaActiva)   c.classList.add('sel');
+    if(activas.includes(fStr)) c.classList.add('tiene');
+    c.onclick=()=>selDia(fStr);
+    cont.appendChild(c);
+  }
+}
+
+function selDia(f){
+  fechaActiva=f;
+  localStorage.setItem('pa_fecha',f);
+  renderCal(); renderTabla();
+  document.getElementById('agendaTitulo').textContent=
+    'Agenda del día: '+labelLargo(f);
+}
+
+function cambiarSemana(d){semanaOffset+=d;renderCal();}
+function irHoy(){semanaOffset=0;selDia(fmtFecha(new Date()));}
+
+function renderTabla(){
+  const lista=DB.getFecha(fechaActiva);
+  const tbody=document.getElementById('tablaBody');
+  tbody.innerHTML='';
+  if(!lista.length){
+    tbody.innerHTML='<tr><td colspan="9" class="vacio">Sin actividades registradas para este día.</td></tr>';
+    return;
+  }
+  lista.forEach(act=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td style="text-align:center">${act.inicio}</td>
+      <td style="text-align:center">${act.termino}</td>
+      <td style="text-align:center"><span class="badge">${act.tipo}</span></td>
+      <td class="td-desc">${act.descripcion}</td>
+      <td style="text-align:center">${act.camioneta||'—'}</td>
+      <td style="text-align:center">${act.folio||'—'}</td>
+      <td style="text-align:center">${act.placas||'—'}</td>
+      <td>${act.resultado||'—'}<br>
+          <small style="color:#999;font-size:10px">${act.timestamp}</small></td>
+      <td style="text-align:center">
+        <button class="btn br"
+          onclick="eliminar('${fechaActiva}',${act.id})">✕</button>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function eliminar(fecha,id){
+  if(!confirm('¿Eliminar esta actividad?')) return;
+  DB.delete(fecha,id); renderCal(); renderTabla();
+}
+
+function irImprimir(){
+  const desde=document.getElementById('impDesde').value;
+  const hasta=document.getElementById('impHasta').value;
+  if(!desde||!hasta){alert('Selecciona el rango de fechas.');return;}
+  if(desde>hasta){alert('La fecha "Del" no puede ser mayor que "Al".');return;}
+  window.location.href=`imprimir.html?desde=${desde}&hasta=${hasta}`;
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  fechaActiva=localStorage.getItem('pa_fecha')||fmtFecha(new Date());
+  const hoy=fmtFecha(new Date());
+  document.getElementById('impDesde').value=hoy;
+  document.getElementById('impHasta').value=hoy;
+  selDia(fechaActiva);
+});
+</script>
+</body>
+</html>

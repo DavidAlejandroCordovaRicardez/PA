@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agregar Actividad</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:Arial,sans-serif;font-size:13px;background:#f0f0f0;color:#222;}
+
+    header{background:#1a5c2a;color:white;padding:10px 20px;
+           display:flex;align-items:center;gap:14px;}
+    .logo{width:50px;height:50px;background:white;border-radius:50%;
+          display:flex;align-items:center;justify-content:center;
+          font-weight:bold;color:#1a5c2a;font-size:11px;text-align:center;flex-shrink:0;}
+    header h1{font-size:19px;letter-spacing:1px;}
+    header p{font-size:11px;opacity:.85;margin-top:2px;}
+
+    .main{max-width:640px;margin:24px auto;padding:0 15px;}
+
+    .aviso{display:none;background:#d4edda;border:1px solid #c3e6cb;
+           color:#155724;padding:12px 16px;border-radius:4px;
+           margin-bottom:16px;font-size:13px;font-weight:bold;}
+
+    .card{background:white;border-radius:6px;border:1px solid #ccc;
+          box-shadow:0 2px 10px rgba(0,0,0,.1);}
+    .card-hdr{background:#1a5c2a;color:white;padding:10px 16px;
+              border-radius:6px 6px 0 0;font-size:15px;font-weight:bold;
+              display:flex;justify-content:space-between;align-items:center;}
+    .card-hdr a{color:white;font-size:12px;text-decoration:none;
+                background:rgba(255,255,255,.2);padding:3px 10px;border-radius:3px;}
+    .card-hdr a:hover{background:rgba(255,255,255,.35);}
+    .card-body{padding:18px;}
+    .card-ftr{padding:12px 18px;border-top:1px solid #eee;
+              display:flex;justify-content:flex-end;gap:10px;
+              background:#fafafa;border-radius:0 0 6px 6px;}
+
+    .fr{margin-bottom:14px;}
+    .fr label{display:block;font-size:12px;font-weight:bold;margin-bottom:4px;color:#333;}
+    .fr input,.fr textarea{width:100%;padding:7px 9px;border:1px solid #ccc;
+      border-radius:3px;font-size:12px;font-family:Arial,sans-serif;}
+    .fr input:focus,.fr textarea:focus{outline:none;border-color:#1a5c2a;
+      box-shadow:0 0 0 2px rgba(26,92,42,.15);}
+    .fr textarea{resize:vertical;height:90px;}
+    .char{text-align:right;font-size:11px;color:#888;margin-top:3px;}
+
+    /* Tip debajo del nombre */
+    .tip{font-size:11px;color:#888;margin-top:3px;}
+
+    .dos-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .tres-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+
+    .seccion{font-size:11px;font-weight:bold;color:#1a5c2a;
+             text-transform:uppercase;letter-spacing:.5px;
+             border-bottom:1px solid #d4edda;padding-bottom:4px;
+             margin-bottom:12px;margin-top:4px;}
+
+    .tipos{display:grid;grid-template-columns:1fr 1fr;gap:7px;
+           border:1px solid #ccc;border-radius:3px;padding:12px;background:#fafafa;}
+    .tipo-item{display:flex;align-items:center;gap:7px;font-size:12px;
+               cursor:pointer;padding:4px 6px;border-radius:3px;transition:background .15s;}
+    .tipo-item:hover{background:#e8f5e9;}
+    .tipo-item input[type=radio]{accent-color:#1a5c2a;cursor:pointer;}
+
+    .btn{border:none;border-radius:3px;cursor:pointer;padding:8px 20px;
+         font-size:13px;font-weight:bold;}
+    .bg{background:#888;color:white;}
+    .bg:hover{background:#666;}
+
+    .btn-agregar{background:#1a5c2a;color:white;border:none;border-radius:4px;
+      padding:10px 28px;font-size:14px;font-weight:bold;cursor:pointer;
+      display:inline-flex;align-items:center;gap:8px;
+      box-shadow:0 2px 6px rgba(0,0,0,.2);transition:background .15s,transform .1s;}
+    .btn-agregar:hover{background:#145022;transform:translateY(-1px);}
+    .btn-agregar:active{transform:translateY(0);}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PA</div>
+  <div>
+    <h1>PROCURADURÍA AGRARIA</h1>
+    <p>DESARROLLO TERRITORIAL — Nueva Actividad</p>
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="aviso" id="aviso">✅ Actividad registrada correctamente.</div>
+
+  <div class="card">
+    <div class="card-hdr">
+      <span>📋 Registrar Nueva Actividad</span>
+      <a href="index.html">← Volver al calendario</a>
+    </div>
+
+    <div class="card-body">
+
+      <!-- ── DATOS DEL FUNCIONARIO ── -->
+      <div class="seccion">👤 Datos del funcionario</div>
+
+      <div class="fr">
+        <label>Nombre completo <span style="color:red">*</span></label>
+        <input type="text" id="fNombre"
+               placeholder="Apellido Apellido Nombre"
+               oninput="guardarNombreLS()"/>
+        <div class="tip">💡 Tu nombre se recuerda para la próxima vez.</div>
+      </div>
+
+      <!-- ── DATOS DEL VEHÍCULO ── -->
+      <div class="seccion">🚗 Datos del vehículo</div>
+      <div class="tres-col">
+        <div class="fr">
+          <label>Camioneta</label>
+          <input type="text" id="fCamioneta" placeholder="Ej: Silverado"/>
+        </div>
+        <div class="fr">
+          <label>Folio</label>
+          <input type="text" id="fFolio" placeholder="Ej: 00123"/>
+        </div>
+        <div class="fr">
+          <label>Placas</label>
+          <input type="text" id="fPlacas" placeholder="Ej: ABC-123"/>
+        </div>
+      </div>
+
+      <!-- ── DATOS DE LA ACTIVIDAD ── -->
+      <div class="seccion">📋 Datos de la actividad</div>
+
+      <div class="fr">
+        <label>Fecha <span style="color:red">*</span></label>
+        <input type="date" id="fFecha"/>
+      </div>
+
+      <div class="fr">
+        <label>Tipo de Actividad <span style="color:red">*</span></label>
+        <div class="tipos" id="tiposGrid"></div>
+      </div>
+
+      <div class="dos-col">
+        <div class="fr">
+          <label>Hora inicio <span style="color:red">*</span></label>
+          <input type="time" id="fInicio" value="09:00"/>
+        </div>
+        <div class="fr">
+          <label>Hora término <span style="color:red">*</span></label>
+          <input type="time" id="fTermino" value="15:00"/>
+        </div>
+      </div>
+
+      <div class="fr">
+        <label>Descripción <span style="color:red">*</span>
+          <span style="font-weight:normal;color:#888">(máx. 250 caracteres)</span>
+        </label>
+        <textarea id="fDesc" maxlength="250"
+          placeholder="Describe la actividad realizada..."
+          oninput="document.getElementById('chars').textContent=250-this.value.length">
+        </textarea>
+        <div class="char"><span id="chars">250</span> caracteres restantes</div>
+      </div>
+
+      <div class="fr">
+        <label>Resultado / Observaciones</label>
+        <input type="text" id="fResultado"
+               placeholder="Ej: Actividad completada satisfactoriamente"/>
+      </div>
+
+    </div><!-- /card-body -->
+
+    <div class="card-ftr">
+      <button class="btn bg" onclick="limpiarForm()">🗑 Limpiar</button>
+      <a href="index.html" class="btn bg"
+         style="text-decoration:none;display:inline-flex;align-items:center;">
+        Cancelar
+      </a>
+      <button class="btn-agregar" onclick="guardarActividad()">
+        ✔ AGREGAR ACTIVIDAD
+      </button>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /main -->
+
+<script>
+/* ══════════════════════════════════════════════
+   BASE DE DATOS LOCAL
+   ══════════════════════════════════════════════ */
+const DB = {
+  save(act) {
+    const db = JSON.parse(localStorage.getItem('pa_actividades') || '{}');
+    if (!db[act.fecha]) db[act.fecha] = [];
+    act.id        = Date.now();
+    act.timestamp = new Date().toLocaleString('es-MX');
+    db[act.fecha].push(act);
+    db[act.fecha].sort((a, b) => a.inicio.localeCompare(b.inicio));
+    localStorage.setItem('pa_actividades', JSON.stringify(db));
+    return act;
+  }
+};
+
+/* ══════════════════════════════════════════════
+   RECORDAR NOMBRE EN localStorage
+   ══════════════════════════════════════════════ */
+function guardarNombreLS() {
+  const nombre = document.getElementById('fNombre').value.trim();
+  if (nombre) localStorage.setItem('pa_nombre', nombre);
+}
+
+function cargarNombreLS() {
+  const nombre = localStorage.getItem('pa_nombre') || '';
+  document.getElementById('fNombre').value = nombre;
+}
+
+/* ══════════════════════════════════════════════
+   TIPOS DE ACTIVIDAD
+   ══════════════════════════════════════════════ */
+const TIPOS = [
+  'Oficina', 'Campo', 'Reunión', 'Traslado',
+  'Comida', 'Audiencia TUA', 'Vacaciones',
+  'Vista de módulo', 'Gira de trabajo',
+  'Incapacidad Médica', 'Reunión FIPP', 'Día festivo / inhábil'
+];
+
+function renderTipos() {
+  document.getElementById('tiposGrid').innerHTML =
+    TIPOS.map((t, i) => `
+      <label class="tipo-item">
+        <input type="radio" name="tipo" value="${t}" ${i === 0 ? 'checked' : ''}/>
+        ${t}
+      </label>`).join('');
+}
+
+/* ══════════════════════════════════════════════
+   GUARDAR ACTIVIDAD
+   ══════════════════════════════════════════════ */
+function guardarActividad() {
+  const nombre    = document.getElementById('fNombre').value.trim();
+  const fecha     = document.getElementById('fFecha').value;
+  const inicio    = document.getElementById('fInicio').value;
+  const termino   = document.getElementById('fTermino').value;
+  const desc      = document.getElementById('fDesc').value.trim();
+  const resultado = document.getElementById('fResultado').value.trim();
+  const camioneta = document.getElementById('fCamioneta').value.trim();
+  const folio     = document.getElementById('fFolio').value.trim();
+  const placas    = document.getElementById('fPlacas').value.trim();
+  const tipoEl    = document.querySelector('input[name="tipo"]:checked');
+
+  // Validaciones
+  if (!nombre)          { alert('⚠ Escribe tu nombre completo.');                  return; }
+  if (!fecha)           { alert('⚠ Selecciona una fecha.');                        return; }
+  if (!inicio)          { alert('⚠ Indica la hora de inicio.');                    return; }
+  if (!termino)         { alert('⚠ Indica la hora de término.');                   return; }
+  if (inicio >= termino){ alert('⚠ La hora de inicio debe ser menor al término.'); return; }
+  if (!tipoEl)          { alert('⚠ Selecciona el tipo de actividad.');             return; }
+  if (!desc)            { alert('⚠ Escribe una descripción.');                     return; }
+
+  // Guardar nombre para la próxima vez
+  localStorage.setItem('pa_nombre', nombre);
+
+  DB.save({
+    nombre,
+    fecha,
+    inicio,
+    termino,
+    tipo:        tipoEl.value,
+    descripcion: desc,
+    resultado,
+    camioneta,
+    folio,
+    placas
+  });
+
+  localStorage.setItem('pa_fecha', fecha);
+
+  // Aviso éxito
+  const aviso = document.getElementById('aviso');
+  aviso.textContent = `✅ Actividad registrada correctamente para ${nombre}.`;
+  aviso.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  limpiarForm(false);
+
+  setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+}
+
+/* ══════════════════════════════════════════════
+   LIMPIAR FORMULARIO
+   ══════════════════════════════════════════════ */
+function limpiarForm(confirmar = true) {
+  if (confirmar && !confirm('¿Limpiar todos los campos?')) return;
+  // El nombre NO se limpia, se mantiene para comodidad
+  document.getElementById('fFecha').value     = getFechaActiva();
+  document.getElementById('fInicio').value    = '09:00';
+  document.getElementById('fTermino').value   = '15:00';
+  document.getElementById('fDesc').value      = '';
+  document.getElementById('fResultado').value = '';
+  document.getElementById('fCamioneta').value = '';
+  document.getElementById('fFolio').value     = '';
+  document.getElementById('fPlacas').value    = '';
+  document.getElementById('chars').textContent = '250';
+  const primera = document.querySelector('input[name="tipo"]');
+  if (primera) primera.checked = true;
+}
+
+/* ══════════════════════════════════════════════
+   UTILIDADES
+   ══════════════════════════════════════════════ */
+function getFechaActiva() {
+  return localStorage.getItem('pa_fecha') ||
+         new Date().toISOString().split('T')[0];
+}
+
+/* ══════════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  cargarNombreLS();          // Carga el nombre guardado
+  document.getElementById('fFecha').value = getFechaActiva();
+  renderTipos();
+});
+</script>
+</body>
+</html>
