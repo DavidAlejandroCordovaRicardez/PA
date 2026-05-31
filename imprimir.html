@@ -203,23 +203,87 @@
   Funcionario: <span id="pieFuncionario"></span>
 </div>
 
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, getDocs,
+  deleteDoc, doc, query, where
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCFWjWyG4xZbMydtCEad90_vij7xeq-Zx8",
+  authDomain: "paag-6acad.firebaseapp.com",
+  projectId: "paag-6acad",
+  storageBucket: "paag-6acad.firebasestorage.app",
+  messagingSenderId: "578174678271",
+  appId: "1:578174678271:web:4f799267a8c5a4e04d08ca",
+  measurementId: "G-RGTXK64ED2"
+};
+
+const app = initializeApp(firebaseConfig);
+window.db = getFirestore(app);
+window.fb = { collection, addDoc, getDocs, deleteDoc, doc, query, where };
+</script>
+
 <script>
 /* ══════════════════════════════════════════════
    BASE DE DATOS LOCAL  (mismo localStorage)
    ══════════════════════════════════════════════ */
+const API_URL =
+"https://script.google.com/macros/s/AKfycbxvL1-cpe9JJS5-HhJksqHajblHVIXCaAfcNGOrO8FbHv5XcPi1JLKVCina6cRh9OTl/exec";
+
 const DB = {
-  getRango(desde, hasta) {
-    const db  = JSON.parse(localStorage.getItem('pa_actividades') || '{}');
-    const res = [];
-    let cur   = parseFecha(desde);
-    const fin = parseFecha(hasta);
-    while (cur <= fin) {
-      const f = fmtFecha(cur);
-      if (db[f]?.length) res.push({ fecha: f, lista: db[f] });
-      cur.setDate(cur.getDate() + 1);
-    }
-    return res;
+
+  async getRango(desde,hasta){
+
+    const r = await fetch(API_URL);
+    const datos = await r.json();
+console.log(datos);
+    const resultado = {};
+
+    datos.forEach((fila,index)=>{
+
+      const fecha = fila[2];
+
+      if(!fecha) return;
+
+      const fechaRegistro = new Date(fecha);
+const fechaInicio = new Date(desde + "T00:00:00");
+const fechaFin = new Date(hasta + "T23:59:59");
+
+if(fechaRegistro >= fechaInicio && fechaRegistro <= fechaFin){
+
+        if(!resultado[fecha]){
+          resultado[fecha] = [];
+        }
+
+        resultado[fecha].push({
+          id:index,
+          timestamp:fila[0],
+          nombre:fila[1],
+          fecha:fila[2],
+          inicio:fila[3],
+          termino:fila[4],
+          tipo:fila[5],
+          descripcion:fila[6],
+          resultado:fila[7],
+          camioneta:fila[8],
+          folio:fila[9],
+          placas:fila[10]
+        });
+      }
+
+    });
+
+    return Object.keys(resultado)
+      .sort()
+      .map(fecha=>({
+        fecha,
+        lista:resultado[fecha]
+      }));
   }
+
 };
 
 const CFG = {
@@ -232,14 +296,35 @@ const CFG = {
 function fmtFecha(d)  { return d.toISOString().split('T')[0]; }
 function parseFecha(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
 
-function labelFechaLargo(s) {
-  return parseFecha(s).toLocaleDateString('es-MX',
-    {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+function labelFechaLargo(s){
+
+  const fecha = new Date(s);
+
+  if(isNaN(fecha)){
+    return s;
+  }
+
+  return fecha.toLocaleDateString('es-MX',{
+    weekday:'long',
+    year:'numeric',
+    month:'long',
+    day:'numeric'
+  });
 }
 
-function labelFechaCorto(s) {
-  return parseFecha(s).toLocaleDateString('es-MX',
-    {day:'2-digit', month:'long', year:'numeric'});
+function labelFechaCorto(s){
+
+  const fecha = new Date(s);
+
+  if(isNaN(fecha)){
+    return s;
+  }
+
+  return fecha.toLocaleDateString('es-MX',{
+    day:'2-digit',
+    month:'long',
+    year:'numeric'
+  });
 }
 
 /* ══════════════════════════════════════════════
@@ -261,7 +346,7 @@ function aplicarConfig() {
 /* ══════════════════════════════════════════════
    CARGAR Y RENDERIZAR REPORTE
    ══════════════════════════════════════════════ */
-function cargarReporte() {
+async function cargarReporte() {
   const desde = document.getElementById('ctrlDesde').value;
   const hasta = document.getElementById('ctrlHasta').value;
 
@@ -274,7 +359,7 @@ function cargarReporte() {
     return;
   }
 
-  const dias = DB.getRango(desde, hasta);
+  const dias = await DB.getRango(desde, hasta);
   renderReporte(dias, desde, hasta);
   // Actualizar URL sin recargar (para compartir o recordar el rango)
   history.replaceState(null, '', `?desde=${desde}&hasta=${hasta}`);
@@ -388,7 +473,7 @@ function leerParams() {
 /* ══════════════════════════════════════════════
    INIT
    ══════════════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   aplicarConfig();
 
   const hoy    = fmtFecha(new Date());
@@ -398,7 +483,7 @@ window.addEventListener('DOMContentLoaded', () => {
   if (params.desde && params.hasta) {
     document.getElementById('ctrlDesde').value = params.desde;
     document.getElementById('ctrlHasta').value = params.hasta;
-    cargarReporte();
+    await cargarReporte();
   } else {
     // Por defecto: mes actual
     const primerDia = new Date();
