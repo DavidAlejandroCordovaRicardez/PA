@@ -208,34 +208,12 @@
 </div>
 
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import {
-  getFirestore, collection, addDoc, getDocs,
-  deleteDoc, doc, query, where
-} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCFWjWyG4xZbMydtCEad90_vij7xeq-Zx8",
-  authDomain: "paag-6acad.firebaseapp.com",
-  projectId: "paag-6acad",
-  storageBucket: "paag-6acad.firebasestorage.app",
-  messagingSenderId: "578174678271",
-  appId: "1:578174678271:web:4f799267a8c5a4e04d08ca",
-  measurementId: "G-RGTXK64ED2"
-};
-
-const app = initializeApp(firebaseConfig);
-window.db = getFirestore(app);
-window.fb = { collection, addDoc, getDocs, deleteDoc, doc, query, where };
-</script>
-
 <script>
 /* ══════════════════════════════════════════════
    BASE DE DATOS LOCAL  (mismo localStorage)
    ══════════════════════════════════════════════ */
 const API_URL =
-"https://script.google.com/macros/s/AKfycbxvL1-cpe9JJS5-HhJksqHajblHVIXCaAfcNGOrO8FbHv5XcPi1JLKVCina6cRh9OTl/exec";
+"https://script.google.com/macros/s/AKfycbxvDcAk8goDM5V-iixtqOAq1ToWx2NY7HrRtNKAX10pxW-TfYMS2gKxFhDrMDqpkz8c/exec";
 
 const DB = {
 
