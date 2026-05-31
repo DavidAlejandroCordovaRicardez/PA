@@ -49,13 +49,29 @@
     /* TABLA */
     .twrap{background:#fff;border:1px solid #ccc;border-top:none;
            border-radius:0 0 4px 4px;overflow-x:auto;}
-    table{width:100%;border-collapse:collapse;}
+    table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
     thead tr{background:#1a5c2a;color:white;}
     thead th{padding:6px 8px;text-align:center;font-size:12px;}
     tbody tr:nth-child(even){background:#f7f7f7;}
     tbody tr:hover{background:#e8f5e9;}
-    tbody td{padding:6px 8px;font-size:12px;vertical-align:middle;border-bottom:1px solid #eee;}
-    .td-desc{max-width:340px;}
+    tbody td{
+  padding:6px 8px;
+  font-size:12px;
+  vertical-align:middle;
+  border-bottom:1px solid #eee;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+    .td-desc{
+  max-width:340px;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
     .badge{display:inline-block;background:#d4edda;color:#155724;
            border-radius:10px;padding:2px 9px;font-size:11px;}
     .vacio{text-align:center;color:#888;padding:22px;font-style:italic;}
@@ -133,142 +149,273 @@
 </div>
 
 <script>
+const API_URL =
+"https://script.google.com/macros/s/AKfycbxvL1-cpe9JJS5-HhJksqHajblHVIXCaAfcNGOrO8FbHv5XcPi1JLKVCina6cRh9OTl/exec";
+
 const DB = {
-  getAll(){ return JSON.parse(localStorage.getItem('pa_actividades')||'{}'); },
-  getFecha(f){ return this.getAll()[f]||[]; },
-  save(act){
-    const db=this.getAll();
-    if(!db[act.fecha]) db[act.fecha]=[];
-    act.id=Date.now();
-    act.timestamp=new Date().toLocaleString('es-MX');
-    db[act.fecha].push(act);
-    db[act.fecha].sort((a,b)=>a.inicio.localeCompare(b.inicio));
-    localStorage.setItem('pa_actividades',JSON.stringify(db));
-    return act;
-  },
-  delete(fecha,id){
-    const db=this.getAll();
-    if(db[fecha]) db[fecha]=db[fecha].filter(a=>a.id!==id);
-    localStorage.setItem('pa_actividades',JSON.stringify(db));
-  },
-  fechasConActividad(){
-    const db=this.getAll();
-    return Object.keys(db).filter(f=>db[f].length>0);
-  },
-  getRango(desde,hasta){
-    const db=this.getAll(); const res=[];
-    let cur=parseFecha(desde); const fin=parseFecha(hasta);
-    while(cur<=fin){
-      const f=fmtFecha(cur);
-      if(db[f]?.length) res.push({fecha:f,lista:db[f]});
-      cur.setDate(cur.getDate()+1);
+
+  async getFecha(fecha){
+
+  const r = await fetch(API_URL);
+  const datos = await r.json();
+
+  console.log(datos);
+
+  const lista = [];
+
+  datos.forEach((fila,i)=>{
+
+    let fechaExcel = String(fila[2] || "").trim();
+
+    // Si viene como fecha completa tipo 2026-04-25T00:00:00
+    if(fechaExcel.includes("T")){
+      fechaExcel = fechaExcel.split("T")[0];
     }
-    return res;
+
+    if(fechaExcel === fecha){
+
+      lista.push({
+        timestamp: fila[0],
+        nombre: fila[1],
+        fecha: fechaExcel,
+        inicio: fila[3],
+        termino: fila[4],
+        tipo: fila[5],
+        descripcion: fila[6],
+        resultado: fila[7],
+        camioneta: fila[8],
+        folio: fila[9],
+        placas: fila[10],
+        id: i
+      });
+
+    }
+
+  });
+
+  return lista;
+  },
+
+  async fechasConActividad(){
+
+    const r = await fetch(API_URL);
+    const datos = await r.json();
+
+    const fechas = [];
+
+    for(let i=0;i<datos.length;i++){
+      if(datos[i][2]){
+        fechas.push(datos[i][2]);
+      }
+    }
+
+    return [...new Set(fechas)];
+  },
+
+  async delete(id){
+    alert("Eliminar registros desde Google Sheets aún no está implementado.");
   }
 };
 
-function fmtFecha(d){return d.toISOString().split('T')[0];}
-function parseFecha(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);}
+function fmtFecha(d){
+
+  const year = d.getFullYear();
+  const month = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+
+  return `${year}-${month}-${day}`;
+}
+
+function parseFecha(s){
+
+  const [y,m,d] = s.split('-').map(Number);
+
+  return new Date(y,m-1,d,12,0,0);
+}
+
+function formatearHora(valor){
+  const d = new Date(valor);
+
+  return d.toLocaleTimeString('es-MX',{
+    hour:'2-digit',
+    minute:'2-digit'
+  });
+}
+
 function labelLargo(s){
-  return parseFecha(s).toLocaleDateString('es-MX',
-    {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  return parseFecha(s).toLocaleDateString('es-MX',{
+    weekday:'long',
+    year:'numeric',
+    month:'long',
+    day:'numeric'
+  });
 }
 
 let semanaOffset=0;
 let fechaActiva=fmtFecha(new Date());
+
 const DIAS_HDR=['LUN','MAR','MIÉ','JUE','VIE','SÁB','DOM'];
 
 function inicioSemana(ref){
-  const d=new Date(ref); const dow=d.getDay();
-  d.setDate(d.getDate()+(dow===0?-6:1-dow)); return d;
+  const d=new Date(ref);
+  const dow=d.getDay();
+  d.setDate(d.getDate()+(dow===0?-6:1-dow));
+  return d;
 }
 
-function renderCal(){
-  const hoy=new Date(); const base=new Date(hoy);
+async function renderCal(){
+
+  const hoy=new Date();
+  const base=new Date(hoy);
+
   base.setDate(base.getDate()+semanaOffset*7);
+
   const lun=inicioSemana(base);
-  const fin=new Date(lun); fin.setDate(fin.getDate()+6);
-  const mL=lun.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
-  const mF=fin.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
+  const fin=new Date(lun);
+
+  fin.setDate(fin.getDate()+6);
+
+  const mL=lun.toLocaleDateString('es-MX',{
+    month:'long',
+    year:'numeric'
+  });
+
+  const mF=fin.toLocaleDateString('es-MX',{
+    month:'long',
+    year:'numeric'
+  });
+
   document.getElementById('calMes').textContent=
-    (mL===mF?mL:mL+' / '+mF).replace(/^\w/,c=>c.toUpperCase());
-  const activas=DB.fechasConActividad();
+    (mL===mF?mL:mL+' / '+mF)
+    .replace(/^\w/,c=>c.toUpperCase());
+
+  const activas = await DB.fechasConActividad();
+
   const cont=document.getElementById('calDias');
   cont.innerHTML='';
+
   DIAS_HDR.forEach(d=>{
     const h=document.createElement('div');
-    h.className='dh'; h.textContent=d; cont.appendChild(h);
+    h.className='dh';
+    h.textContent=d;
+    cont.appendChild(h);
   });
+
   for(let i=0;i<7;i++){
-    const d=new Date(lun); d.setDate(d.getDate()+i);
+
+    const d=new Date(lun);
+    d.setDate(d.getDate()+i);
+
     const fStr=fmtFecha(d);
+
     const c=document.createElement('div');
-    c.className='dc'; c.textContent=d.getDate();
+
+    c.className='dc';
+    c.textContent=d.getDate();
+
     if(fStr===fmtFecha(hoy)) c.classList.add('hoy');
-    if(fStr===fechaActiva)   c.classList.add('sel');
+    if(fStr===fechaActiva) c.classList.add('sel');
     if(activas.includes(fStr)) c.classList.add('tiene');
+
     c.onclick=()=>selDia(fStr);
+
     cont.appendChild(c);
   }
 }
 
-function selDia(f){
+async function selDia(f){
+
   fechaActiva=f;
+
   localStorage.setItem('pa_fecha',f);
-  renderCal(); renderTabla();
+
+  await renderCal();
+  await renderTabla();
+
   document.getElementById('agendaTitulo').textContent=
     'Agenda del día: '+labelLargo(f);
 }
 
-function cambiarSemana(d){semanaOffset+=d;renderCal();}
-function irHoy(){semanaOffset=0;selDia(fmtFecha(new Date()));}
+function cambiarSemana(d){
+  semanaOffset+=d;
+  renderCal();
+}
 
-function renderTabla(){
-  const lista=DB.getFecha(fechaActiva);
+function irHoy(){
+  semanaOffset=0;
+  selDia(fmtFecha(new Date()));
+}
+
+async function renderTabla(){
+
+  const lista=await DB.getFecha(fechaActiva);
+
   const tbody=document.getElementById('tablaBody');
+
   tbody.innerHTML='';
+
   if(!lista.length){
-    tbody.innerHTML='<tr><td colspan="9" class="vacio">Sin actividades registradas para este día.</td></tr>';
+
+    tbody.innerHTML=
+    '<tr><td colspan="9" class="vacio">Sin actividades registradas para este día.</td></tr>';
+
     return;
   }
+
   lista.forEach(act=>{
+
     const tr=document.createElement('tr');
+
     tr.innerHTML=`
-      <td style="text-align:center">${act.inicio}</td>
-      <td style="text-align:center">${act.termino}</td>
-      <td style="text-align:center"><span class="badge">${act.tipo}</span></td>
+      <td style="text-align:center">${formatearHora(act.inicio)}</td>
+<td style="text-align:center">${formatearHora(act.termino)}</td>
+      <td style="text-align:center">
+        <span class="badge">${act.tipo}</span>
+      </td>
       <td class="td-desc">${act.descripcion}</td>
       <td style="text-align:center">${act.camioneta||'—'}</td>
       <td style="text-align:center">${act.folio||'—'}</td>
       <td style="text-align:center">${act.placas||'—'}</td>
-      <td>${act.resultado||'—'}<br>
-          <small style="color:#999;font-size:10px">${act.timestamp}</small></td>
+      <td>${act.resultado||'—'}</td>
       <td style="text-align:center">
-        <button class="btn br"
-          onclick="eliminar('${fechaActiva}',${act.id})">✕</button>
-      </td>`;
+        <button class="btn br">✕</button>
+      </td>
+    `;
+
     tbody.appendChild(tr);
   });
 }
 
-function eliminar(fecha,id){
-  if(!confirm('¿Eliminar esta actividad?')) return;
-  DB.delete(fecha,id); renderCal(); renderTabla();
-}
-
 function irImprimir(){
+
   const desde=document.getElementById('impDesde').value;
   const hasta=document.getElementById('impHasta').value;
-  if(!desde||!hasta){alert('Selecciona el rango de fechas.');return;}
-  if(desde>hasta){alert('La fecha "Del" no puede ser mayor que "Al".');return;}
-  window.location.href=`imprimir.html?desde=${desde}&hasta=${hasta}`;
+
+  if(!desde || !hasta){
+    alert('Selecciona el rango de fechas.');
+    return;
+  }
+
+  if(desde>hasta){
+    alert('La fecha "Del" no puede ser mayor que "Al".');
+    return;
+  }
+
+  window.location.href=
+    `imprimir.html?desde=${desde}&hasta=${hasta}`;
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
-  fechaActiva=localStorage.getItem('pa_fecha')||fmtFecha(new Date());
+
+  fechaActiva=
+    localStorage.getItem('pa_fecha') ||
+    fmtFecha(new Date());
+
   const hoy=fmtFecha(new Date());
+
   document.getElementById('impDesde').value=hoy;
   document.getElementById('impHasta').value=hoy;
+
   selDia(fechaActiva);
 });
 </script>
