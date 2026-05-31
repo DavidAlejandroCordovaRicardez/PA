@@ -122,6 +122,16 @@
     </div>
 
   </div>
+<div id="mensaje"
+     style="display:none;
+            background:#d4edda;
+            color:#155724;
+            border:1px solid #c3e6cb;
+            padding:10px;
+            margin-bottom:10px;
+            border-radius:4px;
+            font-weight:bold;">
+</div>
 
   <!-- AGENDA DEL DÍA -->
   <div class="agenda-hdr">
@@ -133,15 +143,21 @@
   <div class="twrap">
     <table>
       <thead>
-        <tr>
-          <th>INICIO</th><th>TÉRMINO</th><th>ACTIVIDAD</th>
-          <th class="td-desc">DESCRIPCIÓN</th>
-          <th>CAMIONETA</th><th>FOLIO</th><th>PLACAS</th>
-          <th>RESULTADO</th><th>ELIMINAR</th>
-        </tr>
-      </thead>
+  <tr>
+    <th>INICIO</th>
+    <th>TÉRMINO</th>
+    <th>NOMBRE</th>
+    <th>ACTIVIDAD</th>
+    <th class="td-desc">DESCRIPCIÓN</th>
+    <th>CAMIONETA</th>
+    <th>FOLIO</th>
+    <th>PLACAS</th>
+    <th>RESULTADO</th>
+    <th>ELIMINAR</th>
+  </tr>
+</thead>
       <tbody id="tablaBody">
-        <tr><td colspan="9" class="vacio">Selecciona un día del calendario.</td></tr>
+        '<tr><td colspan="10" class="vacio">Sin actividades registradas para este día.</td></tr>';
       </tbody>
     </table>
   </div>
@@ -150,7 +166,8 @@
 
 <script>
 const API_URL =
-"https://script.google.com/macros/s/AKfycbxvL1-cpe9JJS5-HhJksqHajblHVIXCaAfcNGOrO8FbHv5XcPi1JLKVCina6cRh9OTl/exec";
+"https://script.google.com/macros/s/AKfycbxvDcAk8goDM5V-iixtqOAq1ToWx2NY7HrRtNKAX10pxW-TfYMS2gKxFhDrMDqpkz8c/exec";
+
 
 const DB = {
 
@@ -163,7 +180,7 @@ const DB = {
 
   const lista = [];
 
-  datos.forEach((fila,i)=>{
+  datos.slice(1).forEach((fila,i)=>{
 
     let fechaExcel = String(fila[2] || "").trim();
 
@@ -175,23 +192,25 @@ const DB = {
     if(fechaExcel === fecha){
 
       lista.push({
-        timestamp: fila[0],
-        nombre: fila[1],
-        fecha: fechaExcel,
-        inicio: fila[3],
-        termino: fila[4],
-        tipo: fila[5],
-        descripcion: fila[6],
-        resultado: fila[7],
-        camioneta: fila[8],
-        folio: fila[9],
-        placas: fila[10],
-        id: i
-      });
+        id: fila[0],
+  timestamp: fila[0],
+  nombre: fila[1],
+  fecha: fechaExcel,
+  inicio: fila[3],
+  termino: fila[4],
+  tipo: fila[5],
+  descripcion: fila[6],
+  resultado: fila[7],
+  camioneta: fila[8],
+  folio: fila[9],
+  placas: fila[10],
+  
+});
 
     }
 
   });
+  
 
   return lista;
   },
@@ -213,8 +232,19 @@ const DB = {
   },
 
   async delete(id){
-    alert("Eliminar registros desde Google Sheets aún no está implementado.");
-  }
+
+  const form = new FormData();
+
+  form.append("action","delete");
+  form.append("id",id);
+
+  const r = await fetch(API_URL,{
+    method:"POST",
+    body: form
+  });
+
+  return await r.json();
+}
 };
 
 function fmtFecha(d){
@@ -367,23 +397,53 @@ async function renderTabla(){
     const tr=document.createElement('tr');
 
     tr.innerHTML=`
-      <td style="text-align:center">${formatearHora(act.inicio)}</td>
-<td style="text-align:center">${formatearHora(act.termino)}</td>
-      <td style="text-align:center">
-        <span class="badge">${act.tipo}</span>
-      </td>
-      <td class="td-desc">${act.descripcion}</td>
-      <td style="text-align:center">${act.camioneta||'—'}</td>
-      <td style="text-align:center">${act.folio||'—'}</td>
-      <td style="text-align:center">${act.placas||'—'}</td>
-      <td>${act.resultado||'—'}</td>
-      <td style="text-align:center">
-        <button class="btn br">✕</button>
-      </td>
-    `;
+  <td style="text-align:center">${formatearHora(act.inicio)}</td>
+  <td style="text-align:center">${formatearHora(act.termino)}</td>
+  <td>${act.nombre || '—'}</td>
+  <td style="text-align:center">
+    <span class="badge">${act.tipo}</span>
+  </td>
+  <td class="td-desc">${act.descripcion}</td>
+  <td style="text-align:center">${act.camioneta||'—'}</td>
+  <td style="text-align:center">${act.folio||'—'}</td>
+  <td style="text-align:center">${act.placas||'—'}</td>
+  <td>${act.resultado||'—'}</td>
+  <td>
+  <button
+    class="btn br"
+    onclick="eliminarActividad('${act.id}')">
+    ✕
+  </button>
+</td>
+`;
 
     tbody.appendChild(tr);
   });
+}
+async function eliminarActividad(id){
+
+  if(!confirm("¿Eliminar esta actividad?")){
+    return;
+  }
+
+  const resp = await DB.delete(id);
+
+  if(resp.ok){
+
+    const msg = document.getElementById("mensaje");
+
+    msg.style.display = "block";
+    msg.textContent = "✅ Actividad eliminada correctamente";
+
+    setTimeout(()=>{
+      location.reload();
+    },1500);
+
+  }else{
+
+    alert(resp.mensaje || "No se pudo eliminar");
+
+  }
 }
 
 function irImprimir(){
