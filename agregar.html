@@ -80,7 +80,16 @@
 
 <div class="main">
 
-  <div class="aviso" id="aviso">✅ Actividad registrada correctamente.</div>
+  <div id="aviso"
+     style="display:none;
+            background:#d4edda;
+            color:#155724;
+            border:1px solid #c3e6cb;
+            padding:12px;
+            border-radius:4px;
+            margin-bottom:15px;
+            font-weight:bold;">
+</div>
 
   <div class="card">
     <div class="card-hdr">
@@ -181,15 +190,26 @@
 </div><!-- /main -->
 <script>
 const API_URL =
-"https://script.google.com/macros/s/AKfycbxvL1-cpe9JJS5-HhJksqHajblHVIXCaAfcNGOrO8FbHv5XcPi1JLKVCina6cRh9OTl/exec";
-
+"https://script.google.com/macros/s/AKfycbxvDcAk8goDM5V-iixtqOAq1ToWx2NY7HrRtNKAX10pxW-TfYMS2gKxFhDrMDqpkz8c/exec"
 const DB = {
   async save(act){
 
+    const form = new FormData();
+
+    form.append("nombre", act.nombre);
+    form.append("fecha", act.fecha);
+    form.append("inicio", act.inicio);
+    form.append("termino", act.termino);
+    form.append("tipo", act.tipo);
+    form.append("descripcion", act.descripcion);
+    form.append("resultado", act.resultado);
+    form.append("camioneta", act.camioneta);
+    form.append("folio", act.folio);
+    form.append("placas", act.placas);
+
     await fetch(API_URL,{
       method:"POST",
-      mode:"no-cors",
-      body: JSON.stringify(act)
+      body: form
     });
 
     return true;
@@ -258,8 +278,21 @@ async function guardarActividad(){
   localStorage.setItem('pa_nombre', nombre);
   localStorage.setItem('pa_fecha', fecha);
 
-  alert('Actividad guardada correctamente');
-  limpiarForm(false);
+  const aviso = document.getElementById("aviso");
+
+aviso.innerHTML = "✅ Actividad guardada correctamente";
+aviso.style.display = "block";
+
+window.scrollTo({
+  top: 0,
+  behavior: "smooth"
+});
+
+limpiarForm(false);
+
+setTimeout(() => {
+  window.location.href = "index.html";
+}, 1500);
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
