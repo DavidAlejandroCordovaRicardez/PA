@@ -55,13 +55,6 @@
              border-bottom:1px solid #d4edda;padding-bottom:4px;
              margin-bottom:12px;margin-top:4px;}
 
-    .tipos{display:grid;grid-template-columns:1fr 1fr;gap:7px;
-           border:1px solid #ccc;border-radius:3px;padding:12px;background:#fafafa;}
-    .tipo-item{display:flex;align-items:center;gap:7px;font-size:12px;
-               cursor:pointer;padding:4px 6px;border-radius:3px;transition:background .15s;}
-    .tipo-item:hover{background:#e8f5e9;}
-    .tipo-item input[type=radio]{accent-color:#1a5c2a;cursor:pointer;}
-
     .btn{border:none;border-radius:3px;cursor:pointer;padding:8px 20px;
          font-size:13px;font-weight:bold;}
     .bg{background:#888;color:white;}
@@ -134,9 +127,14 @@
       </div>
 
       <div class="fr">
-        <label>Tipo de Actividad <span style="color:red">*</span></label>
-        <div class="tipos" id="tiposGrid"></div>
-      </div>
+  <label>Actividad <span style="color:red">*</span></label>
+  <input
+    type="text"
+    id="fActividad"
+    placeholder="Escribe la actividad"
+    required
+  />
+</div>
 
       <div class="dos-col">
         <div class="fr">
@@ -181,89 +179,75 @@
 
   </div><!-- /card -->
 </div><!-- /main -->
-
 <script>
-/* ══════════════════════════════════════════════
-   BASE DE DATOS LOCAL
-   ══════════════════════════════════════════════ */
+const API_URL =
+"https://script.google.com/macros/s/AKfycbxvL1-cpe9JJS5-HhJksqHajblHVIXCaAfcNGOrO8FbHv5XcPi1JLKVCina6cRh9OTl/exec";
+
 const DB = {
-  save(act) {
-    const db = JSON.parse(localStorage.getItem('pa_actividades') || '{}');
-    if (!db[act.fecha]) db[act.fecha] = [];
-    act.id        = Date.now();
-    act.timestamp = new Date().toLocaleString('es-MX');
-    db[act.fecha].push(act);
-    db[act.fecha].sort((a, b) => a.inicio.localeCompare(b.inicio));
-    localStorage.setItem('pa_actividades', JSON.stringify(db));
-    return act;
+  async save(act){
+
+    await fetch(API_URL,{
+      method:"POST",
+      mode:"no-cors",
+      body: JSON.stringify(act)
+    });
+
+    return true;
   }
 };
-
-/* ══════════════════════════════════════════════
-   RECORDAR NOMBRE EN localStorage
-   ══════════════════════════════════════════════ */
-function guardarNombreLS() {
+function guardarNombreLS(){
   const nombre = document.getElementById('fNombre').value.trim();
-  if (nombre) localStorage.setItem('pa_nombre', nombre);
+  if(nombre) localStorage.setItem('pa_nombre', nombre);
 }
 
-function cargarNombreLS() {
-  const nombre = localStorage.getItem('pa_nombre') || '';
-  document.getElementById('fNombre').value = nombre;
+
+
+function getFechaActiva(){
+  return localStorage.getItem('pa_fecha') ||
+         new Date().toISOString().split('T')[0];
 }
 
-/* ══════════════════════════════════════════════
-   TIPOS DE ACTIVIDAD
-   ══════════════════════════════════════════════ */
-const TIPOS = [
-  'Oficina', 'Campo', 'Reunión', 'Traslado',
-  'Comida', 'Audiencia TUA', 'Vacaciones',
-  'Vista de módulo', 'Gira de trabajo',
-  'Incapacidad Médica', 'Reunión FIPP', 'Día festivo / inhábil'
-];
+function limpiarForm(confirmar=true){
 
-function renderTipos() {
-  document.getElementById('tiposGrid').innerHTML =
-    TIPOS.map((t, i) => `
-      <label class="tipo-item">
-        <input type="radio" name="tipo" value="${t}" ${i === 0 ? 'checked' : ''}/>
-        ${t}
-      </label>`).join('');
+  if(confirmar && !confirm('¿Limpiar todos los campos?')) return;
+
+  document.getElementById('fNombre').value = '';
+  document.getElementById('fFecha').value = getFechaActiva();
+  document.getElementById('fInicio').value = '09:00';
+  document.getElementById('fTermino').value = '15:00';
+  document.getElementById('fActividad').value = '';
+  document.getElementById('fDesc').value = '';
+  document.getElementById('fResultado').value = '';
+  document.getElementById('fCamioneta').value = '';
+  document.getElementById('fFolio').value = '';
+  document.getElementById('fPlacas').value = '';
+
+  document.getElementById('chars').textContent = '250';
 }
 
-/* ══════════════════════════════════════════════
-   GUARDAR ACTIVIDAD
-   ══════════════════════════════════════════════ */
-function guardarActividad() {
-  const nombre    = document.getElementById('fNombre').value.trim();
-  const fecha     = document.getElementById('fFecha').value;
-  const inicio    = document.getElementById('fInicio').value;
-  const termino   = document.getElementById('fTermino').value;
-  const desc      = document.getElementById('fDesc').value.trim();
+async function guardarActividad(){
+
+  const nombre = document.getElementById('fNombre').value.trim();
+  const fecha = document.getElementById('fFecha').value;
+  const inicio = document.getElementById('fInicio').value;
+  const termino = document.getElementById('fTermino').value;
+  const desc = document.getElementById('fDesc').value.trim();
   const resultado = document.getElementById('fResultado').value.trim();
   const camioneta = document.getElementById('fCamioneta').value.trim();
-  const folio     = document.getElementById('fFolio').value.trim();
-  const placas    = document.getElementById('fPlacas').value.trim();
-  const tipoEl    = document.querySelector('input[name="tipo"]:checked');
+  const folio = document.getElementById('fFolio').value.trim();
+  const placas = document.getElementById('fPlacas').value.trim();
+  const actividad = document.getElementById('fActividad').value.trim();
 
-  // Validaciones
-  if (!nombre)          { alert('⚠ Escribe tu nombre completo.');                  return; }
-  if (!fecha)           { alert('⚠ Selecciona una fecha.');                        return; }
-  if (!inicio)          { alert('⚠ Indica la hora de inicio.');                    return; }
-  if (!termino)         { alert('⚠ Indica la hora de término.');                   return; }
-  if (inicio >= termino){ alert('⚠ La hora de inicio debe ser menor al término.'); return; }
-  if (!tipoEl)          { alert('⚠ Selecciona el tipo de actividad.');             return; }
-  if (!desc)            { alert('⚠ Escribe una descripción.');                     return; }
+  if(!nombre) return alert('Escribe tu nombre');
+  if(!fecha) return alert('Selecciona una fecha');
+  if(!actividad) return alert('Escribe una actividad');
 
-  // Guardar nombre para la próxima vez
-  localStorage.setItem('pa_nombre', nombre);
-
-  DB.save({
+  await DB.save({
     nombre,
     fecha,
     inicio,
     termino,
-    tipo:        tipoEl.value,
+    tipo: actividad,
     descripcion: desc,
     resultado,
     camioneta,
@@ -271,54 +255,20 @@ function guardarActividad() {
     placas
   });
 
+  localStorage.setItem('pa_nombre', nombre);
   localStorage.setItem('pa_fecha', fecha);
 
-  // Aviso éxito
-  const aviso = document.getElementById('aviso');
-  aviso.textContent = `✅ Actividad registrada correctamente para ${nombre}.`;
-  aviso.style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
+  alert('Actividad guardada correctamente');
   limpiarForm(false);
-
-  setTimeout(() => { window.location.href = 'index.html'; }, 1500);
 }
 
-/* ══════════════════════════════════════════════
-   LIMPIAR FORMULARIO
-   ══════════════════════════════════════════════ */
-function limpiarForm(confirmar = true) {
-  if (confirmar && !confirm('¿Limpiar todos los campos?')) return;
-  // El nombre NO se limpia, se mantiene para comodidad
-  document.getElementById('fFecha').value     = getFechaActiva();
-  document.getElementById('fInicio').value    = '09:00';
-  document.getElementById('fTermino').value   = '15:00';
-  document.getElementById('fDesc').value      = '';
-  document.getElementById('fResultado').value = '';
-  document.getElementById('fCamioneta').value = '';
-  document.getElementById('fFolio').value     = '';
-  document.getElementById('fPlacas').value    = '';
-  document.getElementById('chars').textContent = '250';
-  const primera = document.querySelector('input[name="tipo"]');
-  if (primera) primera.checked = true;
-}
-
-/* ══════════════════════════════════════════════
-   UTILIDADES
-   ══════════════════════════════════════════════ */
-function getFechaActiva() {
-  return localStorage.getItem('pa_fecha') ||
-         new Date().toISOString().split('T')[0];
-}
-
-/* ══════════════════════════════════════════════
-   INIT
-   ══════════════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded', () => {
-  cargarNombreLS();          // Carga el nombre guardado
+window.addEventListener('DOMContentLoaded',()=>{
+  cargarNombreLS();
   document.getElementById('fFecha').value = getFechaActiva();
-  renderTipos();
 });
+</script>
+
+
 </script>
 </body>
 </html>
