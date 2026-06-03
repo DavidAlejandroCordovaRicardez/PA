@@ -8,119 +8,111 @@
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:Arial,sans-serif;font-size:13px;background:#f0f0f0;color:#222;}
 
-    /* HEADER */
-    header{background:#1a5c2a;color:white;padding:10px 20px;
-           display:flex;align-items:center;gap:14px;}
-    .logo{width:50px;height:50px;background:white;border-radius:50%;
-          display:flex;align-items:center;justify-content:center;
-          font-weight:bold;color:#1a5c2a;font-size:11px;text-align:center;flex-shrink:0;}
-    header h1{font-size:19px;letter-spacing:1px;}
+    header{background:#1a5c2a;color:white;padding:12px 16px;
+           display:flex;align-items:center;gap:10px;}
+    header h1{font-size:17px;letter-spacing:.5px;}
     header p{font-size:11px;opacity:.85;margin-top:2px;}
 
-    /* BARRA FUNCIONARIO */
-    .barra{background:#fff;border-bottom:2px solid #1a5c2a;padding:7px 20px;
-           display:flex;gap:22px;flex-wrap:wrap;align-items:center;font-size:12px;}
-    .barra strong{color:#1a5c2a;}
+    .main{max-width:1100px;margin:12px auto;padding:0 12px;}
 
     /* CONTROLES */
-    .controles{max-width:1100px;margin:14px auto;padding:0 15px;
-               display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;}
-    .ctrl-grupo{display:flex;flex-direction:column;gap:4px;}
+    .controles{background:#fff;border:1px solid #ccc;border-radius:8px;
+               padding:14px;margin-bottom:14px;
+               display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;}
+    .ctrl-grupo{display:flex;flex-direction:column;gap:4px;flex:1;min-width:130px;}
     .ctrl-grupo label{font-size:12px;font-weight:bold;color:#333;}
-    .ctrl-grupo input[type=date]{padding:5px 8px;border:1px solid #ccc;
-                                  border-radius:3px;font-size:12px;}
-    .btn{border:none;border-radius:3px;cursor:pointer;padding:7px 16px;font-size:12px;}
-    .bv{background:#1a5c2a;color:white;font-weight:bold;}
-    .bv:hover{background:#145022;}
-    .ba{background:#ffd700;color:#222;font-weight:bold;}
-    .ba:hover{background:#e6c200;}
-    .bg{background:#888;color:white;}
+    .ctrl-grupo input[type=date]{padding:8px;border:1px solid #ccc;
+                                  border-radius:6px;font-size:13px;width:100%;}
 
     /* RESUMEN */
-    .resumen{max-width:1100px;margin:0 auto 10px;padding:0 15px;
-             display:flex;gap:16px;flex-wrap:wrap;}
-    .res-card{background:white;border:1px solid #ccc;border-radius:4px;
-              padding:10px 18px;text-align:center;min-width:130px;}
-    .res-card .num{font-size:26px;font-weight:bold;color:#1a5c2a;}
+    .resumen{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+    .res-card{background:white;border:1px solid #ccc;border-radius:8px;
+              padding:10px 16px;text-align:center;flex:1;min-width:100px;}
+    .res-card .num{font-size:24px;font-weight:bold;color:#1a5c2a;}
     .res-card .lbl{font-size:11px;color:#666;margin-top:2px;}
 
-    /* CONTENIDO */
-    .contenido{max-width:1100px;margin:0 auto;padding:0 15px 30px;}
+    /* TITULO PERIODO */
+    .titulo-periodo{background:#1a5c2a;color:white;padding:8px 14px;
+                    border-radius:6px;font-weight:bold;font-size:13px;
+                    margin-bottom:12px;display:none;}
 
-    /* BLOQUE POR DÍA */
-    .dia-bloque{background:white;border:1px solid #ccc;border-radius:4px;
-                margin-bottom:14px;overflow:hidden;}
-    .dia-titulo{background:#1a5c2a;color:white;padding:6px 14px;
-                font-size:13px;font-weight:bold;display:flex;
-                justify-content:space-between;align-items:center;}
+    /* BLOQUE DÍA */
+    .dia-bloque{background:white;border:1px solid #ccc;border-radius:8px;
+                margin-bottom:12px;overflow:hidden;}
+    .dia-titulo{background:#1a5c2a;color:white;padding:7px 14px;
+                font-size:13px;font-weight:bold;
+                display:flex;justify-content:space-between;
+                align-items:center;flex-wrap:wrap;gap:4px;}
     .dia-titulo .conteo{font-size:11px;opacity:.85;font-weight:normal;}
 
     /* TABLA */
-    table{width:100%;border-collapse:collapse;}
+    .twrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+    table{width:100%;border-collapse:collapse;min-width:500px;}
     thead tr{background:#2d7a3e;color:white;}
-    thead th{padding:6px 8px;text-align:center;font-size:12px;}
+    thead th{padding:6px 8px;text-align:center;font-size:11px;white-space:nowrap;}
     tbody tr:nth-child(even){background:#f7f7f7;}
-    tbody td{padding:6px 8px;font-size:12px;vertical-align:middle;
-             border-bottom:1px solid #eee;}
-    .td-desc{
-  max-width:340px;
-  white-space:pre-wrap;
-  word-break:break-word;
-}
+    tbody td{padding:6px 8px;font-size:11px;vertical-align:middle;
+             border-bottom:1px solid #eee;word-break:break-word;}
+    .td-desc{max-width:200px;}
     .badge{display:inline-block;background:#d4edda;color:#155724;
-           border-radius:10px;padding:2px 9px;font-size:11px;}
-    .vacio{text-align:center;color:#888;padding:30px;font-style:italic;}
+           border-radius:10px;padding:2px 8px;font-size:10px;white-space:nowrap;}
 
     /* SIN RESULTADOS */
-    .sin-res{background:white;border:1px solid #ccc;border-radius:4px;
+    .sin-res{background:white;border:1px solid #ccc;border-radius:8px;
              text-align:center;padding:40px;color:#888;font-size:14px;}
 
+    /* BOTONES */
+    .btn{border:none;border-radius:6px;cursor:pointer;padding:9px 16px;
+         font-size:13px;font-weight:bold;
+         -webkit-tap-highlight-color:transparent;}
+    .bv{background:#1a5c2a;color:white;}
+    .bv:hover{background:#145022;}
+    .ba{background:#ffd700;color:#222;}
+    .ba:hover{background:#e6c200;}
+    .bg{background:#888;color:white;}
+
+    /* MÓVIL */
+    @media(max-width:600px){
+      .controles{flex-direction:column;}
+      .ctrl-grupo{min-width:unset;width:100%;}
+      .btn{width:100%;text-align:center;}
+      .resumen{gap:8px;}
+      .res-card{min-width:80px;}
+    }
+
     /* ══════════════════════════════
-       ESTILOS DE IMPRESIÓN
+       IMPRESIÓN
        ══════════════════════════════ */
     @media print{
-      /* Ocultar todo lo que no es imprimible */
       .no-print{display:none !important;}
       body{background:white;font-size:11px;}
 
-      /* Header se imprime */
       header{
         background:#1a5c2a !important;
         -webkit-print-color-adjust:exact;
         print-color-adjust:exact;
-        padding:8px 16px;
+        padding:8px 14px;
       }
-      .barra{padding:5px 16px;border-bottom:2px solid #1a5c2a;}
+      .main{padding:0 8px;}
+      .resumen{margin-bottom:8px;}
+      .res-card{padding:6px 10px;}
+      .res-card .num{font-size:18px;}
 
-      .contenido{padding:0 10px 10px;}
-      .resumen{padding:0 10px;margin-bottom:8px;}
-
-      .res-card{padding:6px 12px;}
-      .res-card .num{font-size:20px;}
-
-      /* Bloques por día */
-      .dia-bloque{
-        margin-bottom:10px;
-        page-break-inside:avoid;
-        border:1px solid #999;
-      }
+      .dia-bloque{margin-bottom:8px;page-break-inside:avoid;border:1px solid #999;}
       .dia-titulo{
         background:#1a5c2a !important;
         color:white !important;
         -webkit-print-color-adjust:exact;
         print-color-adjust:exact;
-        padding:5px 12px;
       }
-
-      /* Tabla */
       thead tr{
         background:#2d7a3e !important;
         color:white !important;
         -webkit-print-color-adjust:exact;
         print-color-adjust:exact;
       }
-      thead th{padding:4px 6px;font-size:11px;}
-      tbody td{padding:4px 6px;font-size:11px;border-bottom:1px solid #ddd;}
+      thead th{padding:4px 6px;font-size:10px;}
+      tbody td{padding:4px 6px;font-size:10px;border:1px solid #ddd;}
       tbody tr:nth-child(even) td{
         background:#f5f5f5 !important;
         -webkit-print-color-adjust:exact;
@@ -132,360 +124,294 @@
         -webkit-print-color-adjust:exact;
         print-color-adjust:exact;
       }
-
-      /* Pie de página en cada hoja */
+      .titulo-periodo{
+        background:#1a5c2a !important;
+        color:white !important;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+      }
       .pie-impresion{display:block !important;}
     }
 
-    /* Pie de impresión (solo visible al imprimir) */
     .pie-impresion{
-      display:none;
-      text-align:center;
-      font-size:10px;
-      color:#666;
-      margin-top:20px;
-      border-top:1px solid #ccc;
-      padding-top:8px;
+      display:none;text-align:center;font-size:10px;
+      color:#666;margin-top:16px;border-top:1px solid #ccc;padding-top:8px;
     }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
-  <div class="logo">PA</div>
   <div>
     <h1>PROCURADURÍA AGRARIA</h1>
     <p>DESARROLLO TERRITORIAL — Reporte de Actividades</p>
   </div>
 </header>
 
-<!-- BARRA FUNCIONARIO -->
-<div class="barra">
-  <span><strong>Funcionario:</strong> <span id="tnombre">—</span></span>
-  <span><strong>Delegación:</strong>  <span id="tdelegacion">—</span></span>
-  <span><strong>Camioneta:</strong>   <span id="tcamioneta">—</span></span>
-  <span><strong>Folio:</strong>       <span id="tfolio">—</span></span>
-  <span><strong>Placas:</strong>      <span id="tplacas">—</span></span>
-</div>
+<div class="main">
 
-<!-- CONTROLES (no se imprimen) -->
-<div class="controles no-print">
-  <div class="ctrl-grupo">
-    <label>Del:</label>
-    <input type="date" id="ctrlDesde"/>
+  <!-- CONTROLES -->
+  <div class="controles no-print">
+    <div class="ctrl-grupo">
+      <label>Del:</label>
+      <input type="date" id="ctrlDesde"/>
+    </div>
+    <div class="ctrl-grupo">
+      <label>Al:</label>
+      <input type="date" id="ctrlHasta"/>
+    </div>
+    <button class="btn bv" onclick="cargarReporte()">🔍 Ver reporte</button>
+    <button class="btn ba" onclick="window.print()">🖨 Imprimir / PDF</button>
+    <a href="index.html" class="btn bg"
+       style="text-decoration:none;display:inline-flex;
+              align-items:center;justify-content:center;">
+      ← Volver
+    </a>
   </div>
-  <div class="ctrl-grupo">
-    <label>Al:</label>
-    <input type="date" id="ctrlHasta"/>
+
+  <!-- RESUMEN -->
+  <div class="resumen" id="resumen" style="display:none"></div>
+
+  <!-- TÍTULO PERÍODO -->
+  <div class="titulo-periodo" id="tituloPeriodo"></div>
+
+  <!-- CONTENIDO -->
+  <div id="contenido"></div>
+
+  <!-- PIE IMPRESIÓN -->
+  <div class="pie-impresion" id="pieImpresion">
+    Procuraduría Agraria — Desarrollo Territorial &nbsp;|&nbsp;
+    Reporte generado el <span id="pieDate"></span>
   </div>
-  <button class="btn bv" onclick="cargarReporte()">🔍 Ver reporte</button>
-  <button class="btn ba" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
-  <a href="index.html" class="btn bg" style="text-decoration:none;
-     display:inline-flex;align-items:center;">← Volver</a>
+
 </div>
-
-<!-- TARJETAS RESUMEN -->
-<div class="resumen" id="resumen" style="display:none"></div>
-
-<!-- TÍTULO DEL REPORTE (solo impresión) -->
-<div id="tituloReporte"
-     style="max-width:1100px;margin:0 auto 10px;padding:0 15px;display:none;">
-  <div style="background:#1a5c2a;color:white;padding:8px 14px;
-              border-radius:4px;font-weight:bold;font-size:14px;">
-    📅 Reporte de Actividades — Período: <span id="lblPeriodo"></span>
-  </div>
-</div>
-
-<!-- CONTENIDO DEL REPORTE -->
-<div class="contenido" id="contenido"></div>
-
-<!-- PIE DE IMPRESIÓN -->
-<div class="pie-impresion" id="pieImpresion">
-  Procuraduría Agraria — Desarrollo Territorial |
-  Reporte generado el <span id="pieDate"></span> |
-  Funcionario: <span id="pieFuncionario"></span>
-</div>
-
 
 <script>
 /* ══════════════════════════════════════════════
-   BASE DE DATOS LOCAL  (mismo localStorage)
+   🔌 URL DE TU GOOGLE APPS SCRIPT
    ══════════════════════════════════════════════ */
-const API_URL =
-"https://script.google.com/macros/s/AKfycbxvDcAk8goDM5V-iixtqOAq1ToWx2NY7HrRtNKAX10pxW-TfYMS2gKxFhDrMDqpkz8c/exec";
-
-const DB = {
-
-  async getRango(desde,hasta){
-
-    const r = await fetch(API_URL);
-    const datos = await r.json();
-console.log(datos);
-    const resultado = {};
-
-    datos.forEach((fila,index)=>{
-
-      const fecha = fila[2];
-
-      if(!fecha) return;
-
-      const fechaRegistro = new Date(fecha);
-const fechaInicio = new Date(desde + "T00:00:00");
-const fechaFin = new Date(hasta + "T23:59:59");
-
-if(fechaRegistro >= fechaInicio && fechaRegistro <= fechaFin){
-
-        if(!resultado[fecha]){
-          resultado[fecha] = [];
-        }
-
-        resultado[fecha].push({
-          id:index,
-          timestamp:fila[0],
-          nombre:fila[1],
-          fecha:fila[2],
-          inicio:fila[3],
-          termino:fila[4],
-          tipo:fila[5],
-          descripcion:fila[6],
-          resultado:fila[7],
-          camioneta:fila[8],
-          folio:fila[9],
-          placas:fila[10]
-        });
-      }
-
-    });
-
-    return Object.keys(resultado)
-      .sort()
-      .map(fecha=>({
-        fecha,
-        lista:resultado[fecha]
-      }));
-  }
-
-};
-
-const CFG = {
-  get() { return JSON.parse(localStorage.getItem('pa_config') || '{}'); }
-};
+const API_URL = "https://script.google.com/macros/s/AKfycbw5CkYte-SKBKxpMEu2j3JeR8xcJwDDGeTWpkXyhC02zFrWrgSQkx5XteIpMkif7NP9/exec";
 
 /* ══════════════════════════════════════════════
    UTILIDADES
    ══════════════════════════════════════════════ */
-function fmtFecha(d)  { return d.toISOString().split('T')[0]; }
-function parseFecha(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
-
-function labelFechaLargo(s){
-
-  const fecha = new Date(s);
-
-  if(isNaN(fecha)){
-    return s;
-  }
-
-  return fecha.toLocaleDateString('es-MX',{
-    weekday:'long',
-    year:'numeric',
-    month:'long',
-    day:'numeric'
-  });
+function fmtFecha(d) {
+  return d.getFullYear() + '-' +
+         String(d.getMonth()+1).padStart(2,'0') + '-' +
+         String(d.getDate()).padStart(2,'0');
 }
-
-function labelFechaCorto(s){
-
-  const fecha = new Date(s);
-
-  if(isNaN(fecha)){
-    return s;
+function parseFecha(s) {
+  const [y,m,d] = s.split('-').map(Number);
+  return new Date(y, m-1, d, 12);
+}
+function labelLargo(s) {
+  return parseFecha(s).toLocaleDateString('es-MX',
+    {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+function labelCorto(s) {
+  return parseFecha(s).toLocaleDateString('es-MX',
+    {day:'2-digit',month:'long',year:'numeric'});
+}
+function fmtHora(val) {
+  if (!val) return '—';
+  if (typeof val === 'string' && /^\d{1,2}:\d{2}/.test(val))
+    return val.substring(0,5);
+  if (typeof val === 'number') {
+    const min = Math.round(val * 1440);
+    return String(Math.floor(min/60)).padStart(2,'0') + ':' +
+           String(min%60).padStart(2,'0');
   }
-
-  return fecha.toLocaleDateString('es-MX',{
-    day:'2-digit',
-    month:'long',
-    year:'numeric'
-  });
+  try { return new Date(val).toLocaleTimeString('es-MX',
+    {hour:'2-digit',minute:'2-digit'}); }
+  catch { return String(val); }
+}
+function limpiarFecha(val) {
+  let f = String(val||'').trim();
+  if (f.includes('T')) f = f.split('T')[0];
+  return f;
 }
 
 /* ══════════════════════════════════════════════
-   APLICAR CONFIG
-   ══════════════════════════════════════════════ */
-function aplicarConfig() {
-  const c = CFG.get();
-  const set = (id, v) => { const e=document.getElementById(id); if(e) e.textContent=v||'—'; };
-  set('tnombre',    c.nombre);
-  set('tdelegacion',c.delegacion);
-  set('tcamioneta', c.camioneta);
-  set('tfolio',     c.folio);
-  set('tplacas',    c.placas);
-  // Pie de impresión
-  const pie = document.getElementById('pieFuncionario');
-  if (pie) pie.textContent = c.nombre || '—';
-}
-
-/* ══════════════════════════════════════════════
-   CARGAR Y RENDERIZAR REPORTE
+   CARGAR DATOS
    ══════════════════════════════════════════════ */
 async function cargarReporte() {
   const desde = document.getElementById('ctrlDesde').value;
-  const hasta = document.getElementById('ctrlHasta').value;
+  const hasta  = document.getElementById('ctrlHasta').value;
 
-  if (!desde || !hasta) {
-    alert('Selecciona el rango de fechas.');
-    return;
-  }
-  if (desde > hasta) {
-    alert('La fecha "Del" no puede ser mayor que "Al".');
-    return;
-  }
+  if (!desde || !hasta) { alert('Selecciona el rango de fechas.'); return; }
+  if (desde > hasta)    { alert('"Del" no puede ser mayor que "Al".'); return; }
 
-  const dias = await DB.getRango(desde, hasta);
-  renderReporte(dias, desde, hasta);
-  // Actualizar URL sin recargar (para compartir o recordar el rango)
-  history.replaceState(null, '', `?desde=${desde}&hasta=${hasta}`);
+  document.getElementById('contenido').innerHTML =
+    '<p style="text-align:center;color:#1a5c2a;padding:20px">⏳ Cargando datos...</p>';
+
+  try {
+    const r    = await fetch(API_URL + '?ts=' + Date.now());
+    const rows = await r.json();
+
+    /* Agrupar por fecha dentro del rango */
+    const mapa = {};
+    rows.slice(1).forEach(row => {
+      const f = limpiarFecha(row[8]); /* col 5 = fecha */
+      if (f >= desde && f <= hasta) {
+        if (!mapa[f]) mapa[f] = [];
+        mapa[f].push({
+  id:          row[0],
+  nombre:      row[1],
+  puesto:      row[2],
+  municipio:   row[3],
+
+  camioneta:   row[4],
+  placa:       row[5],
+  folio:       row[6],
+
+  nucleo:      row[7],
+  fecha:       row[8],
+  inicio:      row[9],
+  termino:     row[10],
+  tipo:        row[11],
+  descripcion: row[12],
+  resultado:   row[13],
+  timestamp:   row[14]
+});
+      }
+    });
+
+    const dias = Object.keys(mapa).sort();
+    renderReporte(dias, mapa, desde, hasta);
+    history.replaceState(null,'',`?desde=${desde}&hasta=${hasta}`);
+
+  } catch(e) {
+    document.getElementById('contenido').innerHTML =
+      '<div class="sin-res">❌ Error al cargar datos. Revisa la conexión.</div>';
+  }
 }
 
-function renderReporte(dias, desde, hasta) {
-  const contenido = document.getElementById('contenido');
-  const resumen   = document.getElementById('resumen');
-  const tituloEl  = document.getElementById('tituloReporte');
-  const lblPeriodo= document.getElementById('lblPeriodo');
+/* ══════════════════════════════════════════════
+   RENDERIZAR
+   ══════════════════════════════════════════════ */
+function renderReporte(dias, mapa, desde, hasta) {
 
-  // Calcular totales
-  let totalActs  = 0;
-  const porTipo  = {};
-  dias.forEach(d => {
-    totalActs += d.lista.length;
-    d.lista.forEach(a => {
-      porTipo[a.tipo] = (porTipo[a.tipo] || 0) + 1;
+  /* Totales */
+  let totalActs = 0;
+  const porTipo = {};
+  dias.forEach(f => {
+    mapa[f].forEach(a => {
+      totalActs++;
+      porTipo[a.tipo] = (porTipo[a.tipo]||0) + 1;
     });
   });
 
-  // Título período
-  lblPeriodo.textContent =
-    labelFechaCorto(desde) + ' — ' + labelFechaCorto(hasta);
-  tituloEl.style.display = 'block';
+  /* Título período */
+  const tit = document.getElementById('tituloPeriodo');
+  tit.textContent  = '📅 Período: ' + labelCorto(desde) + ' — ' + labelCorto(hasta);
+  tit.style.display = 'block';
 
-  // Tarjetas resumen
-  resumen.style.display = 'flex';
-  resumen.innerHTML = `
+  /* Tarjetas resumen */
+  const res = document.getElementById('resumen');
+  res.style.display = 'flex';
+  res.innerHTML = `
     <div class="res-card">
       <div class="num">${dias.length}</div>
       <div class="lbl">Días con actividad</div>
     </div>
     <div class="res-card">
       <div class="num">${totalActs}</div>
-      <div class="lbl">Total de actividades</div>
+      <div class="lbl">Total actividades</div>
     </div>
-    ${Object.entries(porTipo).sort((a,b)=>b[1]-a[1]).map(([tipo,n])=>`
+    ${Object.entries(porTipo).sort((a,b)=>b[1]-a[1]).map(([t,n])=>`
     <div class="res-card">
       <div class="num">${n}</div>
-      <div class="lbl">${tipo}</div>
-    </div>`).join('')}
-  `;
+      <div class="lbl">${t||'—'}</div>
+    </div>`).join('')}`;
 
-  // Sin resultados
+  /* Sin resultados */
   if (!dias.length) {
-    contenido.innerHTML = `
+    document.getElementById('contenido').innerHTML = `
       <div class="sin-res">
-        📭 No hay actividades registradas en el período seleccionado.<br>
-        <small style="font-size:12px;color:#aaa;margin-top:8px;display:block">
-          ${labelFechaCorto(desde)} al ${labelFechaCorto(hasta)}
+        📭 No hay actividades en el período seleccionado.<br>
+        <small style="color:#aaa;display:block;margin-top:8px">
+          ${labelCorto(desde)} al ${labelCorto(hasta)}
         </small>
       </div>`;
     return;
   }
 
-  // Bloques por día
-  contenido.innerHTML = dias.map(d => `
+  /* Bloques por día */
+  document.getElementById('contenido').innerHTML = dias.map(f => `
     <div class="dia-bloque">
       <div class="dia-titulo">
-        <span>📅 ${labelFechaLargo(d.fecha)}</span>
-        <span class="conteo">${d.lista.length} actividad${d.lista.length!==1?'es':''}</span>
+        <span>📅 ${labelLargo(f)}</span>
+        <span class="conteo">
+          ${mapa[f].length} actividad${mapa[f].length!==1?'es':''}
+        </span>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>INICIO</th>
-            <th>TÉRMINO</th>
-            <th>ACTIVIDAD</th>
-            <th class="td-desc">DESCRIPCIÓN</th>
-            <th>RESULTADO / REGISTRO</th>
-            <th>HORA DE REGISTRO</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${d.lista.map(a => `
-          <tr>
-            <td style="text-align:center">${formatearHora(a.inicio)}</td>
-<td style="text-align:center">${formatearHora(a.termino)}</td>
-            <td style="text-align:center">
-              <span class="badge">${a.tipo}</span>
-            </td>
-            <td class="td-desc">${a.descripcion || ''}</td>
-            <td>${a.resultado || '—'}</td>
-            <td style="font-size:10px;color:#888;white-space:nowrap">
-              ${a.timestamp || '—'}
-            </td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-  `).join('');
+      <div class="twrap">
+        <table>
+          <thead>
+            <tr>
+              <th>INICIO</th>
+              <th>TÉRMINO</th>
+              <th>NOMBRE</th>
+              <th>CAMIONETA</th>
+<th>PLACA</th>
+<th>FOLIO</th>
+              <th>PUESTO</th>
+              <th>MUNICIPIO</th>
+              <th>NÚCLEO AGRARIO</th>
+              <th>ACTIVIDAD</th>
+              <th class="td-desc">DESCRIPCIÓN</th>
+              <th>RESULTADO</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${mapa[f].map(a=>`
+            <tr>
+  <td>${fmtHora(a.inicio)}</td>
+  <td>${fmtHora(a.termino)}</td>
 
-  // Actualizar pie de impresión
+  <td>${a.nombre || '—'}</td>
+  <td>${a.camioneta || '—'}</td>
+  <td>${a.placa || '—'}</td>
+  <td>${a.folio || '—'}</td>
+
+  <td>${a.puesto || '—'}</td>
+  <td>${a.municipio || '—'}</td>
+  <td>${a.nucleo || '—'}</td>
+
+  <td><span class="badge">${a.tipo || '—'}</span></td>
+  <td>${a.descripcion || '—'}</td>
+  <td>${a.resultado || '—'}</td>
+</tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`).join('');
+
+  /* Pie de impresión */
   document.getElementById('pieDate').textContent =
     new Date().toLocaleDateString('es-MX',
-      {day:'2-digit', month:'long', year:'numeric'});
+      {day:'2-digit',month:'long',year:'numeric'});
 }
 
 /* ══════════════════════════════════════════════
-   LEER PARÁMETROS DE URL  (?desde=...&hasta=...)
+   LEER PARÁMETROS DE URL
    ══════════════════════════════════════════════ */
-function leerParams() {
-  const p = new URLSearchParams(window.location.search);
-  return {
-    desde: p.get('desde') || '',
-    hasta: p.get('hasta') || ''
-  };
-}
-function formatearHora(valor){
+window.addEventListener('DOMContentLoaded', () => {
+  const p     = new URLSearchParams(window.location.search);
+  const desde = p.get('desde') || '';
+  const hasta  = p.get('hasta')  || '';
+  const hoy   = fmtFecha(new Date());
 
-  if(!valor) return '—';
-
-  const fecha = new Date(valor);
-
-  if(isNaN(fecha)) return valor;
-
-  return fecha.toLocaleTimeString('es-MX',{
-    hour:'2-digit',
-    minute:'2-digit',
-    hour12:false
-  });
-}
-
-/* ══════════════════════════════════════════════
-   INIT
-   ══════════════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded', async () => {
-  aplicarConfig();
-
-  const hoy    = fmtFecha(new Date());
-  const params = leerParams();
-
-  // Si viene con parámetros desde index.html, cargar automáticamente
-  if (params.desde && params.hasta) {
-    document.getElementById('ctrlDesde').value = params.desde;
-    document.getElementById('ctrlHasta').value = params.hasta;
-    await cargarReporte();
+  if (desde && hasta) {
+    document.getElementById('ctrlDesde').value = desde;
+    document.getElementById('ctrlHasta').value  = hasta;
+    cargarReporte();
   } else {
-    // Por defecto: mes actual
+    /* Por defecto: mes actual */
     const primerDia = new Date();
     primerDia.setDate(1);
     document.getElementById('ctrlDesde').value = fmtFecha(primerDia);
-    document.getElementById('ctrlHasta').value = hoy;
+    document.getElementById('ctrlHasta').value  = hoy;
   }
 });
 </script>
