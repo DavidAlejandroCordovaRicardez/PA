@@ -8,94 +8,137 @@
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:Arial,sans-serif;font-size:13px;background:#f0f0f0;color:#222;}
 
-    header{background:#1a5c2a;color:white;padding:10px 20px;display:flex;align-items:center;gap:14px;}
-    .logo{width:50px;height:50px;background:white;border-radius:50%;display:flex;align-items:center;
-          justify-content:center;font-weight:bold;color:#1a5c2a;font-size:11px;text-align:center;flex-shrink:0;}
-    header h1{font-size:19px;letter-spacing:1px;}
+    header{background:#1a5c2a;color:white;padding:12px 16px;
+           display:flex;align-items:center;gap:10px;}
+    header h1{font-size:17px;letter-spacing:.5px;}
     header p{font-size:11px;opacity:.85;margin-top:2px;}
 
-    .main{max-width:1100px;margin:15px auto;padding:0 15px;}
-    .panel-top{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:0;}
+    .main{max-width:1100px;margin:12px auto;padding:0 12px;}
+
+    /* PANEL TOP */
+    .panel-top{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
 
     /* CALENDARIO */
-    .calendario{background:#fff;border:1px solid #ccc;border-radius:4px;flex:1;min-width:480px;}
-    .cal-nav{background:#e8e8e8;display:flex;align-items:center;gap:8px;
-             padding:5px 10px;border-bottom:1px solid #ccc;}
-    .cal-nav .mes{font-weight:bold;font-size:13px;min-width:170px;text-align:center;}
-    .cal-dias{display:grid;grid-template-columns:repeat(7,1fr);}
-    .dh{background:#1a5c2a;color:white;text-align:center;padding:5px 2px;font-size:12px;font-weight:bold;}
-    .dc{text-align:center;padding:7px 2px;cursor:pointer;border-top:1px solid #eee;
-        font-size:12px;transition:background .15s;user-select:none;}
-    .dc:hover{background:#d4edda;}
-    .dc.hoy{background:#1a5c2a;color:white;font-weight:bold;border-radius:3px;}
-    .dc.sel{background:#ffd700;font-weight:bold;border-radius:3px;}
-    .dc.tiene::after{content:'●';display:block;font-size:8px;color:#1a5c2a;margin-top:1px;}
-    .dc.hoy.tiene::after,.dc.sel.tiene::after{color:white;}
+    .calendario{background:#fff;border:1px solid #ccc;
+                border-radius:8px;flex:1;min-width:300px;}
+    .cal-nav{background:#e8e8e8;display:flex;align-items:center;
+             gap:6px;padding:6px 10px;border-bottom:1px solid #ccc;
+             border-radius:8px 8px 0 0;flex-wrap:wrap;}
+    .cal-nav .mes{font-weight:bold;font-size:13px;
+                  flex:1;text-align:center;min-width:120px;}
+    .cal-tabla{width:100%;border-collapse:collapse;}
+    .cal-tabla th{background:#1a5c2a;color:white;text-align:center;
+                  padding:7px 2px;font-size:12px;font-weight:bold;}
+    .cal-tabla td{text-align:center;padding:10px 2px;cursor:pointer;
+                  font-size:14px;border:1px solid #f0f0f0;
+                  transition:background .15s;user-select:none;}
+    .cal-tabla td:hover{background:#d4edda;}
+    .cal-tabla td.hoy{background:#1a5c2a;color:white;
+                      font-weight:bold;border-radius:3px;}
+    .cal-tabla td.sel{background:#ffd700;font-weight:bold;border-radius:3px;}
+    .cal-tabla td.tiene::after{content:'●';display:block;font-size:7px;
+                               color:#1a5c2a;margin-top:1px;}
+    .cal-tabla td.hoy.tiene::after,
+    .cal-tabla td.sel.tiene::after{color:white;}
 
     /* PANEL IMPRIMIR */
-    .p-imp{background:#fff;border:1px solid #ccc;border-radius:4px;padding:12px;min-width:210px;}
+    .p-imp{background:#fff;border:1px solid #ccc;border-radius:8px;
+           padding:12px;min-width:200px;flex:0 0 auto;}
     .p-imp h3{font-size:12px;color:#1a5c2a;margin-bottom:8px;
               border-bottom:1px solid #ddd;padding-bottom:4px;}
     .p-imp label{font-size:12px;display:block;margin-bottom:3px;}
-    .p-imp input[type=date]{width:100%;padding:4px;border:1px solid #ccc;
-                            border-radius:3px;font-size:12px;margin-bottom:8px;}
+    .p-imp input[type=date]{width:100%;padding:8px;border:1px solid #ccc;
+                            border-radius:6px;font-size:13px;margin-bottom:8px;}
 
     /* AGENDA */
-    .agenda-hdr{background:#1a5c2a;color:white;padding:7px 12px;margin-top:12px;
+    .agenda-hdr{background:#1a5c2a;color:white;padding:8px 12px;
                 display:flex;justify-content:space-between;align-items:center;
-                border-radius:4px 4px 0 0;}
+                border-radius:8px 8px 0 0;flex-wrap:wrap;gap:8px;}
     .agenda-hdr span{font-size:13px;font-weight:bold;}
 
     /* TABLA */
     .twrap{background:#fff;border:1px solid #ccc;border-top:none;
-           border-radius:0 0 4px 4px;overflow-x:auto;}
-    table{
-  width:100%;
-  border-collapse:collapse;
-  table-layout:fixed;
-}
-    thead tr{background:#1a5c2a;color:white;}
-    thead th{padding:6px 8px;text-align:center;font-size:12px;}
-    tbody tr:nth-child(even){background:#f7f7f7;}
-    tbody tr:hover{background:#e8f5e9;}
-    tbody td{
-  padding:6px 8px;
-  font-size:12px;
-  vertical-align:middle;
-  border-bottom:1px solid #eee;
-  white-space:normal;
-  overflow-wrap:anywhere;
-}
-    .td-desc{
-  max-width:340px;
-  white-space:normal;
-  overflow-wrap:anywhere;
-  word-break:break-word;
-}
+           border-radius:0 0 8px 8px;overflow-x:auto;
+           -webkit-overflow-scrolling:touch;}
+    table.datos{width:100%;border-collapse:collapse;min-width:600px;}
+    table.datos thead tr{background:#1a5c2a;color:white;}
+    table.datos thead th{padding:7px 8px;text-align:center;
+                         font-size:12px;white-space:nowrap;}
+    table.datos tbody tr:nth-child(even){background:#f7f7f7;}
+    table.datos tbody tr:hover{background:#e8f5e9;}
+    table.datos tbody td{padding:7px 8px;font-size:12px;
+                         vertical-align:middle;border-bottom:1px solid #eee;
+                         word-break:break-word;}
+    .td-desc{max-width:200px;}
     .badge{display:inline-block;background:#d4edda;color:#155724;
-           border-radius:10px;padding:2px 9px;font-size:11px;}
+           border-radius:10px;padding:2px 8px;font-size:11px;white-space:nowrap;}
     .vacio{text-align:center;color:#888;padding:22px;font-style:italic;}
+    .cargando{text-align:center;color:#1a5c2a;padding:20px;font-style:italic;}
 
     /* BOTONES */
-    .btn{border:none;border-radius:3px;cursor:pointer;padding:5px 13px;font-size:12px;}
-    .bv{background:#1a5c2a;color:white;font-weight:bold;}
+    .btn{border:none;border-radius:6px;cursor:pointer;
+         padding:8px 14px;font-size:12px;font-weight:bold;
+         -webkit-tap-highlight-color:transparent;}
+    .bv{background:#1a5c2a;color:white;}
     .bv:hover{background:#145022;}
-    .ba{background:#ffd700;color:#222;font-weight:bold;}
+    .ba{background:#ffd700;color:#222;}
     .ba:hover{background:#e6c200;}
     .bg{background:#888;color:white;}
-    .br{background:#c0392b;color:white;font-size:11px;padding:3px 8px;}
+    .br{background:#c0392b;color:white;font-size:11px;
+        padding:6px 10px;border-radius:6px;}
     .br:hover{background:#a93226;}
+
+    /* AVISO */
+    .aviso{display:none;background:#d4edda;color:#155724;
+           border:1px solid #c3e6cb;padding:10px 14px;
+           margin-bottom:10px;border-radius:6px;font-weight:bold;}
+    .aviso.err{background:#f8d7da;color:#721c24;border-color:#f5c6cb;}
+
+
+    .toast{
+  position:fixed;
+  top:15px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:9999;
+  background:#1a5c2a;
+  color:#fff;
+  padding:12px 22px;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:bold;
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+  opacity:0;
+  transition:.3s;
+  pointer-events:none;
+}
+
+.toast.show{
+  opacity:1;
+}
+    /* MÓVIL */
+    @media(max-width:600px){
+      .panel-top{flex-direction:column;}
+      .p-imp{min-width:unset;width:100%;}
+      .agenda-hdr{flex-direction:column;align-items:flex-start;}
+      .agenda-hdr a{width:100%;text-align:center;
+                    display:block;padding:10px;}
+      .cal-tabla td{padding:12px 2px;font-size:15px;}
+    }
   </style>
 </head>
 <body>
-
+<div id="toast" class="toast"></div>
 <header>
   <div>
     <h1>PROCURADURÍA AGRARIA</h1>
+    <p>DESARROLLO TERRITORIAL — Registro de Agenda y Actividades</p>
   </div>
 </header>
 
 <div class="main">
+
+  <div class="aviso" id="mensaje"></div>
 
   <div class="panel-top">
 
@@ -105,9 +148,17 @@
         <button class="btn bg" onclick="cambiarSemana(-1)">◀ Anterior</button>
         <span class="mes" id="calMes"></span>
         <button class="btn bg" onclick="cambiarSemana(1)">Siguiente ▶</button>
-        <button class="btn bv" style="margin-left:auto" onclick="irHoy()">HOY</button>
+        <button class="btn bv" onclick="irHoy()">HOY</button>
       </div>
-      <div class="cal-dias" id="calDias"></div>
+      <table class="cal-tabla">
+        <thead>
+          <tr>
+            <th>LUN</th><th>MAR</th><th>MIÉ</th>
+            <th>JUE</th><th>VIE</th><th>SÁB</th><th>DOM</th>
+          </tr>
+        </thead>
+        <tbody id="calBody"></tbody>
+      </table>
     </div>
 
     <!-- PANEL IMPRIMIR -->
@@ -117,21 +168,11 @@
       <input type="date" id="impDesde"/>
       <label>Al:</label>
       <input type="date" id="impHasta"/>
-      <button class="btn bv" style="width:100%;margin-top:2px"
+      <button class="btn bv" style="width:100%;padding:9px"
               onclick="irImprimir()">IMPRIMIR / DESCARGAR</button>
     </div>
 
   </div>
-<div id="mensaje"
-     style="display:none;
-            background:#d4edda;
-            color:#155724;
-            border:1px solid #c3e6cb;
-            padding:10px;
-            margin-bottom:10px;
-            border-radius:4px;
-            font-weight:bold;">
-</div>
 
   <!-- AGENDA DEL DÍA -->
   <div class="agenda-hdr">
@@ -141,341 +182,320 @@
     </a>
   </div>
   <div class="twrap">
-    <table>
+    <table class="datos">
       <thead>
-  <tr>
-    <th>INICIO</th>
-    <th>TÉRMINO</th>
-    <th>NOMBRE</th>
-    <th>ACTIVIDAD</th>
-    <th class="td-desc">DESCRIPCIÓN</th>
-    <th>CAMIONETA</th>
-    <th>FOLIO</th>
-    <th>PLACAS</th>
-    <th>RESULTADO</th>
-    <th>ELIMINAR</th>
-  </tr>
-</thead>
+        <tr>
+          <th>INICIO</th>
+          <th>TÉRMINO</th>
+          <th>NOMBRE</th>
+          <th>CAMIONETA</th>
+          <th>PLACA</th>
+          <th>FOLIO</th>
+          <th>PUESTO</th>
+          <th>MUNICIPIO</th>
+          <th>NÚCLEO</th>
+          <th>ACTIVIDAD</th>
+          <th class="td-desc">DESCRIPCIÓN</th>
+          <th>RESULTADO</th>
+          <th>ELIMINAR</th>
+
+        </tr>
+      </thead>
       <tbody id="tablaBody">
-        '<tr><td colspan="10" class="vacio">Sin actividades registradas para este día.</td></tr>';
+        <tr>
+          <td colspan="10" class="vacio">
+            Selecciona un día del calendario.
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
 
-</div>
+</div><!-- /main -->
 
 <script>
-const API_URL =
-"https://script.google.com/macros/s/AKfycbxvDcAk8goDM5V-iixtqOAq1ToWx2NY7HrRtNKAX10pxW-TfYMS2gKxFhDrMDqpkz8c/exec";
+/* ══════════════════════════════════════════════
+   🔌 URL DE TU GOOGLE APPS SCRIPT
+   ══════════════════════════════════════════════ */
+const API_URL = "https://script.google.com/macros/s/AKfycbw5CkYte-SKBKxpMEu2j3JeR8xcJwDDGeTWpkXyhC02zFrWrgSQkx5XteIpMkif7NP9/exec";
 
-
+/* ══════════════════════════════════════════════
+   CAPA DE DATOS
+   Columnas del Apps Script:
+   0=id  1=nombre  2=puesto  3=municipio  4=nucleo
+   5=fecha  6=inicio  7=termino  8=tipo
+   9=descripcion  10=resultado  11=timestamp
+   ══════════════════════════════════════════════ */
 const DB = {
+  _cache:   null,
+  _cacheTs: 0,
 
-  async getFecha(fecha){
+  async _todos() {
+    const now = Date.now();
+    if (this._cache && (now - this._cacheTs) < 8000) return this._cache;
+    const r  = await fetch(API_URL + "?ts=" + now);
+    const d  = await r.json();
+    this._cache   = d;
+    this._cacheTs = now;
+    return d;
+  },
 
-  const r = await fetch(API_URL);
-  const datos = await r.json();
+  _fecha(val) {
+    let f = String(val || "").trim();
+    if (f.includes("T")) f = f.split("T")[0];
+    return f;
+  },
 
-  console.log(datos);
+  async getFecha(fecha) {
+    const rows = await this._todos();
+    const out  = [];
+    rows.slice(1).forEach(r => {
+      if (this._fecha(r[8]) === fecha) {
+        out.push({
+  id:          r[0],
+  nombre:      r[1],
+  puesto:      r[2],
+  municipio:   r[3],
 
-  const lista = [];
+  camioneta:   r[4],
+  placa:       r[5],
+  folio:       r[6],
 
-  datos.slice(1).forEach((fila,i)=>{
-
-    let fechaExcel = String(fila[2] || "").trim();
-
-    // Si viene como fecha completa tipo 2026-04-25T00:00:00
-    if(fechaExcel.includes("T")){
-      fechaExcel = fechaExcel.split("T")[0];
-    }
-
-    if(fechaExcel === fecha){
-
-      lista.push({
-        id: fila[0],
-  timestamp: fila[0],
-  nombre: fila[1],
-  fecha: fechaExcel,
-  inicio: fila[3],
-  termino: fila[4],
-  tipo: fila[5],
-  descripcion: fila[6],
-  resultado: fila[7],
-  camioneta: fila[8],
-  folio: fila[9],
-  placas: fila[10],
-  
+  nucleo:      r[7],
+  fecha:       this._fecha(r[8]),
+  inicio:      r[9],
+  termino:     r[10],
+  tipo:        r[11],
+  descripcion: r[12],
+  resultado:   r[13],
+  timestamp:   r[14]
 });
-
-    }
-
-  });
-  
-
-  return lista;
-  },
-
-  async fechasConActividad(){
-
-    const r = await fetch(API_URL);
-    const datos = await r.json();
-
-    const fechas = [];
-
-    for(let i=0;i<datos.length;i++){
-      if(datos[i][2]){
-        fechas.push(datos[i][2]);
       }
-    }
-
-    return [...new Set(fechas)];
+    });
+    return out;
   },
 
-  async delete(id){
+  async fechasConActividad() {
+    const rows = await this._todos();
+    const set  = new Set();
+    rows.slice(1).forEach(r => {
+      const f = this._fecha(r[8]);
+      if (f) set.add(f);
+    });
+    return [...set];
+  },
 
-  const form = new FormData();
-
-  form.append("action","delete");
-  form.append("id",id);
-
-  const r = await fetch(API_URL,{
-    method:"POST",
-    body: form
-  });
-
-  return await r.json();
-}
+  async delete(id) {
+    const form = new FormData();
+    form.append("action", "delete");
+    form.append("id", id);
+    const r = await fetch(API_URL, { method: "POST", body: form });
+    this._cache = null;
+    return await r.json();
+  }
 };
 
-function fmtFecha(d){
-
-  const year = d.getFullYear();
-  const month = String(d.getMonth()+1).padStart(2,'0');
-  const day = String(d.getDate()).padStart(2,'0');
-
-  return `${year}-${month}-${day}`;
+/* ══════════════════════════════════════════════
+   UTILIDADES
+   ══════════════════════════════════════════════ */
+function fmtFecha(d) {
+  return d.getFullYear() + '-' +
+         String(d.getMonth()+1).padStart(2,'0') + '-' +
+         String(d.getDate()).padStart(2,'0');
 }
-
-function parseFecha(s){
-
+function parseFecha(s) {
   const [y,m,d] = s.split('-').map(Number);
-
-  return new Date(y,m-1,d,12,0,0);
+  return new Date(y, m-1, d, 12);
+}
+function labelLargo(s) {
+  return parseFecha(s).toLocaleDateString('es-MX',
+    {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+function fmtHora(val) {
+  if (!val) return '—';
+  if (typeof val === 'string' && /^\d{1,2}:\d{2}/.test(val))
+    return val.substring(0, 5);
+  if (typeof val === 'number') {
+    const min = Math.round(val * 1440);
+    return String(Math.floor(min/60)).padStart(2,'0') + ':' +
+           String(min % 60).padStart(2,'0');
+  }
+  try {
+    return new Date(val).toLocaleTimeString('es-MX',
+      {hour:'2-digit', minute:'2-digit'});
+  } catch { return String(val); }
 }
 
-function formatearHora(valor){
-  const d = new Date(valor);
+/* ══════════════════════════════════════════════
+   ESTADO
+   ══════════════════════════════════════════════ */
+let semanaOffset = 0;
+let fechaActiva  = fmtFecha(new Date());
 
-  return d.toLocaleTimeString('es-MX',{
-    hour:'2-digit',
-    minute:'2-digit'
-  });
-}
-
-function labelLargo(s){
-  return parseFecha(s).toLocaleDateString('es-MX',{
-    weekday:'long',
-    year:'numeric',
-    month:'long',
-    day:'numeric'
-  });
-}
-
-let semanaOffset=0;
-let fechaActiva=fmtFecha(new Date());
-
-const DIAS_HDR=['LUN','MAR','MIÉ','JUE','VIE','SÁB','DOM'];
-
-function inicioSemana(ref){
-  const d=new Date(ref);
-  const dow=d.getDay();
-  d.setDate(d.getDate()+(dow===0?-6:1-dow));
+/* ══════════════════════════════════════════════
+   CALENDARIO SEMANAL
+   ══════════════════════════════════════════════ */
+function inicioSemana(ref) {
+  const d = new Date(ref), dow = d.getDay();
+  d.setDate(d.getDate() + (dow === 0 ? -6 : 1 - dow));
   return d;
 }
 
-async function renderCal(){
+async function renderCal() {
+  const hoy  = new Date();
+  const base = new Date(hoy);
+  base.setDate(base.getDate() + semanaOffset * 7);
 
-  const hoy=new Date();
-  const base=new Date(hoy);
+  const lun = inicioSemana(base);
+  const fin = new Date(lun); fin.setDate(fin.getDate() + 6);
 
-  base.setDate(base.getDate()+semanaOffset*7);
+  /* Etiqueta mes */
+  const mL = lun.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
+  const mF = fin.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
+  document.getElementById('calMes').textContent =
+    (mL === mF ? mL : mL + ' / ' + mF).replace(/^\w/, c => c.toUpperCase());
 
-  const lun=inicioSemana(base);
-  const fin=new Date(lun);
+  /* Fechas con actividad */
+  let activas = [];
+  try { activas = await DB.fechasConActividad(); } catch(e) {}
 
-  fin.setDate(fin.getDate()+6);
+  /* Construir fila semanal */
+  const tbody = document.getElementById('calBody');
+  tbody.innerHTML = '';
+  const tr = document.createElement('tr');
 
-  const mL=lun.toLocaleDateString('es-MX',{
-    month:'long',
-    year:'numeric'
-  });
+  for (let i = 0; i < 7; i++) {
+    const d    = new Date(lun); d.setDate(d.getDate() + i);
+    const fStr = fmtFecha(d);
+    const td   = document.createElement('td');
+    td.textContent = d.getDate();
 
-  const mF=fin.toLocaleDateString('es-MX',{
-    month:'long',
-    year:'numeric'
-  });
+    if (fStr === fmtFecha(hoy)) td.classList.add('hoy');
+    if (fStr === fechaActiva)   td.classList.add('sel');
+    if (activas.includes(fStr)) td.classList.add('tiene');
 
-  document.getElementById('calMes').textContent=
-    (mL===mF?mL:mL+' / '+mF)
-    .replace(/^\w/,c=>c.toUpperCase());
+    td.onclick = () => selDia(fStr);
+    tr.appendChild(td);
+  }
+  tbody.appendChild(tr);
+}
 
-  const activas = await DB.fechasConActividad();
+async function selDia(f) {
+  fechaActiva = f;
+  localStorage.setItem('pa_fecha', f);
+  await renderCal();
+  await renderTabla();
+  document.getElementById('agendaTitulo').textContent =
+    'Agenda del día: ' + labelLargo(f);
+}
 
-  const cont=document.getElementById('calDias');
-  cont.innerHTML='';
+function cambiarSemana(d) { semanaOffset += d; renderCal(); }
+function irHoy() { semanaOffset = 0; selDia(fmtFecha(new Date())); }
 
-  DIAS_HDR.forEach(d=>{
-    const h=document.createElement('div');
-    h.className='dh';
-    h.textContent=d;
-    cont.appendChild(h);
-  });
+/* ══════════════════════════════════════════════
+   TABLA
+   ══════════════════════════════════════════════ */
+async function renderTabla() {
+  const tbody = document.getElementById('tablaBody');
+  tbody.innerHTML =
+    '<tr><td colspan="10" class="cargando">⏳ Cargando...</td></tr>';
 
-  for(let i=0;i<7;i++){
+  try {
+    const lista = await DB.getFecha(fechaActiva);
+    tbody.innerHTML = '';
 
-    const d=new Date(lun);
-    d.setDate(d.getDate()+i);
+    if (!lista.length) {
+      tbody.innerHTML =
+        '<tr><td colspan="10" class="vacio">Sin actividades para este día.</td></tr>';
+      return;
+    }
 
-    const fStr=fmtFecha(d);
+    lista.forEach(act => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="text-align:center;white-space:nowrap">
+          ${fmtHora(act.inicio)}</td>
+        <td style="text-align:center;white-space:nowrap">
+          ${fmtHora(act.termino)}</td>
+        <td>${act.nombre || '—'}</td>
+<td>${act.camioneta || '—'}</td>
+<td>${act.placa || '—'}</td>
+<td>${act.folio || '—'}</td>
+<td>${act.puesto || '—'}</td>
+<td>${act.municipio || '—'}</td>
+<td>${act.nucleo || '—'}</td>
+        <td style="text-align:center">
+          <span class="badge">${act.tipo || '—'}</span></td>
+        <td class="td-desc">${act.descripcion || '—'}</td>
+        <td>${act.resultado || '—'}</td>
+        <td style="text-align:center">
+          <button class="btn br"
+            onclick="eliminar('${act.id}')">✕</button></td>`;
+      tbody.appendChild(tr);
+    });
 
-    const c=document.createElement('div');
-
-    c.className='dc';
-    c.textContent=d.getDate();
-
-    if(fStr===fmtFecha(hoy)) c.classList.add('hoy');
-    if(fStr===fechaActiva) c.classList.add('sel');
-    if(activas.includes(fStr)) c.classList.add('tiene');
-
-    c.onclick=()=>selDia(fStr);
-
-    cont.appendChild(c);
+  } catch(e) {
+    tbody.innerHTML =
+      '<tr><td colspan="10" class="vacio">❌ Error al cargar. Revisa la conexión.</td></tr>';
   }
 }
 
-async function selDia(f){
+function mostrarToast(mensaje) {
+  const toast = document.getElementById('toast');
 
-  fechaActiva=f;
+  toast.textContent = mensaje;
+  toast.classList.add('show');
 
-  localStorage.setItem('pa_fecha',f);
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2000);
+}
+/* ══════════════════════════════════════════════
+   ELIMINAR
+   ══════════════════════════════════════════════ */
+async function eliminar(id) {
+  if (!confirm('¿Eliminar esta actividad?')) return;
+  try {
+    const r   = await DB.delete(id);
+    const msg = document.getElementById('mensaje');
+    if (r.ok) {
+  mostrarToast('✅ Actividad eliminada correctamente');
 
   await renderCal();
   await renderTabla();
-
-  document.getElementById('agendaTitulo').textContent=
-    'Agenda del día: '+labelLargo(f);
-}
-
-function cambiarSemana(d){
-  semanaOffset+=d;
-  renderCal();
-}
-
-function irHoy(){
-  semanaOffset=0;
-  selDia(fmtFecha(new Date()));
-}
-
-async function renderTabla(){
-
-  const lista=await DB.getFecha(fechaActiva);
-
-  const tbody=document.getElementById('tablaBody');
-
-  tbody.innerHTML='';
-
-  if(!lista.length){
-
-    tbody.innerHTML=
-    '<tr><td colspan="9" class="vacio">Sin actividades registradas para este día.</td></tr>';
-
-    return;
-  }
-
-  lista.forEach(act=>{
-
-    const tr=document.createElement('tr');
-
-    tr.innerHTML=`
-  <td style="text-align:center">${formatearHora(act.inicio)}</td>
-  <td style="text-align:center">${formatearHora(act.termino)}</td>
-  <td>${act.nombre || '—'}</td>
-  <td style="text-align:center">
-    <span class="badge">${act.tipo}</span>
-  </td>
-  <td class="td-desc">${act.descripcion}</td>
-  <td style="text-align:center">${act.camioneta||'—'}</td>
-  <td style="text-align:center">${act.folio||'—'}</td>
-  <td style="text-align:center">${act.placas||'—'}</td>
-  <td>${act.resultado||'—'}</td>
-  <td>
-  <button
-    class="btn br"
-    onclick="eliminarActividad('${act.id}')">
-    ✕
-  </button>
-</td>
-`;
-
-    tbody.appendChild(tr);
-  });
-}
-async function eliminarActividad(id){
-
-  if(!confirm("¿Eliminar esta actividad?")){
-    return;
-  }
-
-  const resp = await DB.delete(id);
-
-  if(resp.ok){
-
-    const msg = document.getElementById("mensaje");
-
-    msg.style.display = "block";
-    msg.textContent = "✅ Actividad eliminada correctamente";
-
-    setTimeout(()=>{
-      location.reload();
-    },1500);
-
-  }else{
-
-    alert(resp.mensaje || "No se pudo eliminar");
-
+}else {
+      alert(r.mensaje || 'No se pudo eliminar.');
+    }
+  } catch(e) {
+    alert('Error al eliminar. Revisa la conexión.');
   }
 }
 
-function irImprimir(){
-
-  const desde=document.getElementById('impDesde').value;
-  const hasta=document.getElementById('impHasta').value;
-
-  if(!desde || !hasta){
+/* ══════════════════════════════════════════════
+   IMPRIMIR
+   ══════════════════════════════════════════════ */
+function irImprimir() {
+  const desde = document.getElementById('impDesde').value;
+  const hasta  = document.getElementById('impHasta').value;
+  if (!desde || !hasta) {
     alert('Selecciona el rango de fechas.');
     return;
   }
-
-  if(desde>hasta){
-    alert('La fecha "Del" no puede ser mayor que "Al".');
+  if (desde > hasta) {
+    alert('"Del" no puede ser mayor que "Al".');
     return;
   }
-
-  window.location.href=
-    `imprimir.html?desde=${desde}&hasta=${hasta}`;
+  window.location.href = `imprimir.html?desde=${desde}&hasta=${hasta}`;
 }
 
-window.addEventListener('DOMContentLoaded',()=>{
-
-  fechaActiva=
-    localStorage.getItem('pa_fecha') ||
-    fmtFecha(new Date());
-
-  const hoy=fmtFecha(new Date());
-
-  document.getElementById('impDesde').value=hoy;
-  document.getElementById('impHasta').value=hoy;
-
+/* ══════════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  fechaActiva = localStorage.getItem('pa_fecha') || fmtFecha(new Date());
+  const hoy   = fmtFecha(new Date());
+  document.getElementById('impDesde').value = hoy;
+  document.getElementById('impHasta').value = hoy;
   selDia(fechaActiva);
 });
 </script>
