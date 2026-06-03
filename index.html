@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registro de Actividades</title>
+  <title>Imprimir Actividades</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:Arial,sans-serif;font-size:13px;background:#f0f0f0;color:#222;}
@@ -15,285 +15,182 @@
 
     .main{max-width:1100px;margin:12px auto;padding:0 12px;}
 
-    /* PANEL TOP */
-    .panel-top{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+    /* CONTROLES */
+    .controles{background:#fff;border:1px solid #ccc;border-radius:8px;
+               padding:14px;margin-bottom:14px;
+               display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;}
+    .ctrl-grupo{display:flex;flex-direction:column;gap:4px;flex:1;min-width:130px;}
+    .ctrl-grupo label{font-size:12px;font-weight:bold;color:#333;}
+    .ctrl-grupo input[type=date]{padding:8px;border:1px solid #ccc;
+                                  border-radius:6px;font-size:13px;width:100%;}
 
-    /* CALENDARIO */
-    .calendario{background:#fff;border:1px solid #ccc;
-                border-radius:8px;flex:1;min-width:300px;}
-    .cal-nav{background:#e8e8e8;display:flex;align-items:center;
-             gap:6px;padding:6px 10px;border-bottom:1px solid #ccc;
-             border-radius:8px 8px 0 0;flex-wrap:wrap;}
-    .cal-nav .mes{font-weight:bold;font-size:13px;
-                  flex:1;text-align:center;min-width:120px;}
-    .cal-tabla{width:100%;border-collapse:collapse;}
-    .cal-tabla th{background:#1a5c2a;color:white;text-align:center;
-                  padding:7px 2px;font-size:12px;font-weight:bold;}
-    .cal-tabla td{text-align:center;padding:10px 2px;cursor:pointer;
-                  font-size:14px;border:1px solid #f0f0f0;
-                  transition:background .15s;user-select:none;}
-    .cal-tabla td:hover{background:#d4edda;}
-    .cal-tabla td.hoy{background:#1a5c2a;color:white;
-                      font-weight:bold;border-radius:3px;}
-    .cal-tabla td.sel{background:#ffd700;font-weight:bold;border-radius:3px;}
-    .cal-tabla td.tiene::after{content:'●';display:block;font-size:7px;
-                               color:#1a5c2a;margin-top:1px;}
-    .cal-tabla td.hoy.tiene::after,
-    .cal-tabla td.sel.tiene::after{color:white;}
+    /* RESUMEN */
+    .resumen{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+    .res-card{background:white;border:1px solid #ccc;border-radius:8px;
+              padding:10px 16px;text-align:center;flex:1;min-width:100px;}
+    .res-card .num{font-size:24px;font-weight:bold;color:#1a5c2a;}
+    .res-card .lbl{font-size:11px;color:#666;margin-top:2px;}
 
-    /* PANEL IMPRIMIR */
-    .p-imp{background:#fff;border:1px solid #ccc;border-radius:8px;
-           padding:12px;min-width:200px;flex:0 0 auto;}
-    .p-imp h3{font-size:12px;color:#1a5c2a;margin-bottom:8px;
-              border-bottom:1px solid #ddd;padding-bottom:4px;}
-    .p-imp label{font-size:12px;display:block;margin-bottom:3px;}
-    .p-imp input[type=date]{width:100%;padding:8px;border:1px solid #ccc;
-                            border-radius:6px;font-size:13px;margin-bottom:8px;}
+    /* TITULO PERIODO */
+    .titulo-periodo{background:#1a5c2a;color:white;padding:8px 14px;
+                    border-radius:6px;font-weight:bold;font-size:13px;
+                    margin-bottom:12px;display:none;}
 
-    /* AGENDA */
-    .agenda-hdr{background:#1a5c2a;color:white;padding:8px 12px;
-                display:flex;justify-content:space-between;align-items:center;
-                border-radius:8px 8px 0 0;flex-wrap:wrap;gap:8px;}
-    .agenda-hdr span{font-size:13px;font-weight:bold;}
+    /* BLOQUE DÍA */
+    .dia-bloque{background:white;border:1px solid #ccc;border-radius:8px;
+                margin-bottom:12px;overflow:hidden;}
+    .dia-titulo{background:#1a5c2a;color:white;padding:7px 14px;
+                font-size:13px;font-weight:bold;
+                display:flex;justify-content:space-between;
+                align-items:center;flex-wrap:wrap;gap:4px;}
+    .dia-titulo .conteo{font-size:11px;opacity:.85;font-weight:normal;}
 
     /* TABLA */
-    .twrap{background:#fff;border:1px solid #ccc;border-top:none;
-           border-radius:0 0 8px 8px;overflow-x:auto;
-           -webkit-overflow-scrolling:touch;}
-    table.datos{width:100%;border-collapse:collapse;min-width:600px;}
-    table.datos thead tr{background:#1a5c2a;color:white;}
-    table.datos thead th{padding:7px 8px;text-align:center;
-                         font-size:12px;white-space:nowrap;}
-    table.datos tbody tr:nth-child(even){background:#f7f7f7;}
-    table.datos tbody tr:hover{background:#e8f5e9;}
-    table.datos tbody td{padding:7px 8px;font-size:12px;
-                         vertical-align:middle;border-bottom:1px solid #eee;
-                         word-break:break-word;}
+    .twrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+    table{width:100%;border-collapse:collapse;min-width:500px;}
+    thead tr{background:#2d7a3e;color:white;}
+    thead th{padding:6px 8px;text-align:center;font-size:11px;white-space:nowrap;}
+    tbody tr:nth-child(even){background:#f7f7f7;}
+    tbody td{padding:6px 8px;font-size:11px;vertical-align:middle;
+             border-bottom:1px solid #eee;word-break:break-word;}
     .td-desc{max-width:200px;}
     .badge{display:inline-block;background:#d4edda;color:#155724;
-           border-radius:10px;padding:2px 8px;font-size:11px;white-space:nowrap;}
-    .vacio{text-align:center;color:#888;padding:22px;font-style:italic;}
-    .cargando{text-align:center;color:#1a5c2a;padding:20px;font-style:italic;}
+           border-radius:10px;padding:2px 8px;font-size:10px;white-space:nowrap;}
+
+    /* SIN RESULTADOS */
+    .sin-res{background:white;border:1px solid #ccc;border-radius:8px;
+             text-align:center;padding:40px;color:#888;font-size:14px;}
 
     /* BOTONES */
-    .btn{border:none;border-radius:6px;cursor:pointer;
-         padding:8px 14px;font-size:12px;font-weight:bold;
+    .btn{border:none;border-radius:6px;cursor:pointer;padding:9px 16px;
+         font-size:13px;font-weight:bold;
          -webkit-tap-highlight-color:transparent;}
     .bv{background:#1a5c2a;color:white;}
     .bv:hover{background:#145022;}
     .ba{background:#ffd700;color:#222;}
     .ba:hover{background:#e6c200;}
     .bg{background:#888;color:white;}
-    .br{background:#c0392b;color:white;font-size:11px;
-        padding:6px 10px;border-radius:6px;}
-    .br:hover{background:#a93226;}
 
-    /* AVISO */
-    .aviso{display:none;background:#d4edda;color:#155724;
-           border:1px solid #c3e6cb;padding:10px 14px;
-           margin-bottom:10px;border-radius:6px;font-weight:bold;}
-    .aviso.err{background:#f8d7da;color:#721c24;border-color:#f5c6cb;}
-
-
-    .toast{
-  position:fixed;
-  top:15px;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:9999;
-  background:#1a5c2a;
-  color:#fff;
-  padding:12px 22px;
-  border-radius:8px;
-  font-size:14px;
-  font-weight:bold;
-  box-shadow:0 4px 12px rgba(0,0,0,.25);
-  opacity:0;
-  transition:.3s;
-  pointer-events:none;
-}
-
-.toast.show{
-  opacity:1;
-}
     /* MÓVIL */
     @media(max-width:600px){
-      .panel-top{flex-direction:column;}
-      .p-imp{min-width:unset;width:100%;}
-      .agenda-hdr{flex-direction:column;align-items:flex-start;}
-      .agenda-hdr a{width:100%;text-align:center;
-                    display:block;padding:10px;}
-      .cal-tabla td{padding:12px 2px;font-size:15px;}
+      .controles{flex-direction:column;}
+      .ctrl-grupo{min-width:unset;width:100%;}
+      .btn{width:100%;text-align:center;}
+      .resumen{gap:8px;}
+      .res-card{min-width:80px;}
+    }
+
+    /* ══════════════════════════════
+       IMPRESIÓN
+       ══════════════════════════════ */
+    @media print{
+      .no-print{display:none !important;}
+      body{background:white;font-size:11px;}
+
+      header{
+        background:#1a5c2a !important;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+        padding:8px 14px;
+      }
+      .main{padding:0 8px;}
+      .resumen{margin-bottom:8px;}
+      .res-card{padding:6px 10px;}
+      .res-card .num{font-size:18px;}
+
+      .dia-bloque{margin-bottom:8px;page-break-inside:avoid;border:1px solid #999;}
+      .dia-titulo{
+        background:#1a5c2a !important;
+        color:white !important;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+      }
+      thead tr{
+        background:#2d7a3e !important;
+        color:white !important;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+      }
+      thead th{padding:4px 6px;font-size:10px;}
+      tbody td{padding:4px 6px;font-size:10px;border:1px solid #ddd;}
+      tbody tr:nth-child(even) td{
+        background:#f5f5f5 !important;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+      }
+      .badge{
+        background:#d4edda !important;
+        color:#155724 !important;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+      }
+      .titulo-periodo{
+        background:#1a5c2a !important;
+        color:white !important;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+      }
+      .pie-impresion{display:block !important;}
+    }
+
+    .pie-impresion{
+      display:none;text-align:center;font-size:10px;
+      color:#666;margin-top:16px;border-top:1px solid #ccc;padding-top:8px;
     }
   </style>
 </head>
 <body>
-<div id="toast" class="toast"></div>
+
 <header>
   <div>
     <h1>PROCURADURÍA AGRARIA</h1>
-    <p>DESARROLLO TERRITORIAL — Registro de Agenda y Actividades</p>
+    <p>DESARROLLO TERRITORIAL — Reporte de Actividades</p>
   </div>
 </header>
 
 <div class="main">
 
-  <div class="aviso" id="mensaje"></div>
-
-  <div class="panel-top">
-
-    <!-- CALENDARIO SEMANAL -->
-    <div class="calendario">
-      <div class="cal-nav">
-        <button class="btn bg" onclick="cambiarSemana(-1)">◀ Anterior</button>
-        <span class="mes" id="calMes"></span>
-        <button class="btn bg" onclick="cambiarSemana(1)">Siguiente ▶</button>
-        <button class="btn bv" onclick="irHoy()">HOY</button>
-      </div>
-      <table class="cal-tabla">
-        <thead>
-          <tr>
-            <th>LUN</th><th>MAR</th><th>MIÉ</th>
-            <th>JUE</th><th>VIE</th><th>SÁB</th><th>DOM</th>
-          </tr>
-        </thead>
-        <tbody id="calBody"></tbody>
-      </table>
-    </div>
-
-    <!-- PANEL IMPRIMIR -->
-    <div class="p-imp">
-      <h3>🖨 Rango para imprimir</h3>
+  <!-- CONTROLES -->
+  <div class="controles no-print">
+    <div class="ctrl-grupo">
       <label>Del:</label>
-      <input type="date" id="impDesde"/>
-      <label>Al:</label>
-      <input type="date" id="impHasta"/>
-      <button class="btn bv" style="width:100%;padding:9px"
-              onclick="irImprimir()">IMPRIMIR / DESCARGAR</button>
+      <input type="date" id="ctrlDesde"/>
     </div>
-
-  </div>
-
-  <!-- AGENDA DEL DÍA -->
-  <div class="agenda-hdr">
-    <span id="agendaTitulo">Agenda del día — selecciona una fecha</span>
-    <a href="agregar.html" class="btn ba" style="text-decoration:none">
-      + Agregar actividad
+    <div class="ctrl-grupo">
+      <label>Al:</label>
+      <input type="date" id="ctrlHasta"/>
+    </div>
+    <button class="btn bv" onclick="cargarReporte()">🔍 Ver reporte</button>
+    <button class="btn ba" onclick="window.print()">🖨 Imprimir / PDF</button>
+    <a href="index.html" class="btn bg"
+       style="text-decoration:none;display:inline-flex;
+              align-items:center;justify-content:center;">
+      ← Volver
     </a>
   </div>
-  <div class="twrap">
-    <table class="datos">
-      <thead>
-        <tr>
-          <th>INICIO</th>
-          <th>TÉRMINO</th>
-          <th>NOMBRE</th>
-          <th>CAMIONETA</th>
-          <th>PLACA</th>
-          <th>FOLIO</th>
-          <th>PUESTO</th>
-          <th>MUNICIPIO</th>
-          <th>NÚCLEO</th>
-          <th>ACTIVIDAD</th>
-          <th class="td-desc">DESCRIPCIÓN</th>
-          <th>RESULTADO</th>
-          <th>ELIMINAR</th>
 
-        </tr>
-      </thead>
-      <tbody id="tablaBody">
-        <tr>
-          <td colspan="10" class="vacio">
-            Selecciona un día del calendario.
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- RESUMEN -->
+  <div class="resumen" id="resumen" style="display:none"></div>
+
+  <!-- TÍTULO PERÍODO -->
+  <div class="titulo-periodo" id="tituloPeriodo"></div>
+
+  <!-- CONTENIDO -->
+  <div id="contenido"></div>
+
+  <!-- PIE IMPRESIÓN -->
+  <div class="pie-impresion" id="pieImpresion">
+    Procuraduría Agraria — Desarrollo Territorial &nbsp;|&nbsp;
+    Reporte generado el <span id="pieDate"></span>
   </div>
 
-</div><!-- /main -->
+</div>
 
 <script>
 /* ══════════════════════════════════════════════
    🔌 URL DE TU GOOGLE APPS SCRIPT
    ══════════════════════════════════════════════ */
 const API_URL = "https://script.google.com/macros/s/AKfycbw5CkYte-SKBKxpMEu2j3JeR8xcJwDDGeTWpkXyhC02zFrWrgSQkx5XteIpMkif7NP9/exec";
-
-/* ══════════════════════════════════════════════
-   CAPA DE DATOS
-   Columnas del Apps Script:
-   0=id  1=nombre  2=puesto  3=municipio  4=nucleo
-   5=fecha  6=inicio  7=termino  8=tipo
-   9=descripcion  10=resultado  11=timestamp
-   ══════════════════════════════════════════════ */
-const DB = {
-  _cache:   null,
-  _cacheTs: 0,
-
-  async _todos() {
-    const now = Date.now();
-    if (this._cache && (now - this._cacheTs) < 8000) return this._cache;
-    const r  = await fetch(API_URL + "?ts=" + now);
-    const d  = await r.json();
-    this._cache   = d;
-    this._cacheTs = now;
-    return d;
-  },
-
-  _fecha(val) {
-    let f = String(val || "").trim();
-    if (f.includes("T")) f = f.split("T")[0];
-    return f;
-  },
-
-  async getFecha(fecha) {
-    const rows = await this._todos();
-    const out  = [];
-    rows.slice(1).forEach(r => {
-      if (this._fecha(r[8]) === fecha) {
-        out.push({
-  id:          r[0],
-  nombre:      r[1],
-  puesto:      r[2],
-  municipio:   r[3],
-
-  camioneta:   r[4],
-  placa:       r[5],
-  folio:       r[6],
-
-  nucleo:      r[7],
-  fecha:       this._fecha(r[8]),
-  inicio:      r[9],
-  termino:     r[10],
-  tipo:        r[11],
-  descripcion: r[12],
-  resultado:   r[13],
-  timestamp:   r[14]
-});
-      }
-    });
-    return out;
-  },
-
-  async fechasConActividad() {
-    const rows = await this._todos();
-    const set  = new Set();
-    rows.slice(1).forEach(r => {
-      const f = this._fecha(r[8]);
-      if (f) set.add(f);
-    });
-    return [...set];
-  },
-
-  async delete(id) {
-    const form = new FormData();
-    form.append("action", "delete");
-    form.append("id", id);
-    const r = await fetch(API_URL, { method: "POST", body: form });
-    this._cache = null;
-    return await r.json();
-  }
-};
 
 /* ══════════════════════════════════════════════
    UTILIDADES
@@ -311,192 +208,211 @@ function labelLargo(s) {
   return parseFecha(s).toLocaleDateString('es-MX',
     {weekday:'long',year:'numeric',month:'long',day:'numeric'});
 }
+function labelCorto(s) {
+  return parseFecha(s).toLocaleDateString('es-MX',
+    {day:'2-digit',month:'long',year:'numeric'});
+}
 function fmtHora(val) {
   if (!val) return '—';
   if (typeof val === 'string' && /^\d{1,2}:\d{2}/.test(val))
-    return val.substring(0, 5);
+    return val.substring(0,5);
   if (typeof val === 'number') {
     const min = Math.round(val * 1440);
     return String(Math.floor(min/60)).padStart(2,'0') + ':' +
-           String(min % 60).padStart(2,'0');
+           String(min%60).padStart(2,'0');
   }
-  try {
-    return new Date(val).toLocaleTimeString('es-MX',
-      {hour:'2-digit', minute:'2-digit'});
-  } catch { return String(val); }
+  try { return new Date(val).toLocaleTimeString('es-MX',
+    {hour:'2-digit',minute:'2-digit'}); }
+  catch { return String(val); }
+}
+function limpiarFecha(val) {
+  let f = String(val||'').trim();
+  if (f.includes('T')) f = f.split('T')[0];
+  return f;
 }
 
 /* ══════════════════════════════════════════════
-   ESTADO
+   CARGAR DATOS
    ══════════════════════════════════════════════ */
-let semanaOffset = 0;
-let fechaActiva  = fmtFecha(new Date());
+async function cargarReporte() {
+  const desde = document.getElementById('ctrlDesde').value;
+  const hasta  = document.getElementById('ctrlHasta').value;
 
-/* ══════════════════════════════════════════════
-   CALENDARIO SEMANAL
-   ══════════════════════════════════════════════ */
-function inicioSemana(ref) {
-  const d = new Date(ref), dow = d.getDay();
-  d.setDate(d.getDate() + (dow === 0 ? -6 : 1 - dow));
-  return d;
-}
+  if (!desde || !hasta) { alert('Selecciona el rango de fechas.'); return; }
+  if (desde > hasta)    { alert('"Del" no puede ser mayor que "Al".'); return; }
 
-async function renderCal() {
-  const hoy  = new Date();
-  const base = new Date(hoy);
-  base.setDate(base.getDate() + semanaOffset * 7);
-
-  const lun = inicioSemana(base);
-  const fin = new Date(lun); fin.setDate(fin.getDate() + 6);
-
-  /* Etiqueta mes */
-  const mL = lun.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
-  const mF = fin.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
-  document.getElementById('calMes').textContent =
-    (mL === mF ? mL : mL + ' / ' + mF).replace(/^\w/, c => c.toUpperCase());
-
-  /* Fechas con actividad */
-  let activas = [];
-  try { activas = await DB.fechasConActividad(); } catch(e) {}
-
-  /* Construir fila semanal */
-  const tbody = document.getElementById('calBody');
-  tbody.innerHTML = '';
-  const tr = document.createElement('tr');
-
-  for (let i = 0; i < 7; i++) {
-    const d    = new Date(lun); d.setDate(d.getDate() + i);
-    const fStr = fmtFecha(d);
-    const td   = document.createElement('td');
-    td.textContent = d.getDate();
-
-    if (fStr === fmtFecha(hoy)) td.classList.add('hoy');
-    if (fStr === fechaActiva)   td.classList.add('sel');
-    if (activas.includes(fStr)) td.classList.add('tiene');
-
-    td.onclick = () => selDia(fStr);
-    tr.appendChild(td);
-  }
-  tbody.appendChild(tr);
-}
-
-async function selDia(f) {
-  fechaActiva = f;
-  localStorage.setItem('pa_fecha', f);
-  await renderCal();
-  await renderTabla();
-  document.getElementById('agendaTitulo').textContent =
-    'Agenda del día: ' + labelLargo(f);
-}
-
-function cambiarSemana(d) { semanaOffset += d; renderCal(); }
-function irHoy() { semanaOffset = 0; selDia(fmtFecha(new Date())); }
-
-/* ══════════════════════════════════════════════
-   TABLA
-   ══════════════════════════════════════════════ */
-async function renderTabla() {
-  const tbody = document.getElementById('tablaBody');
-  tbody.innerHTML =
-    '<tr><td colspan="10" class="cargando">⏳ Cargando...</td></tr>';
+  document.getElementById('contenido').innerHTML =
+    '<p style="text-align:center;color:#1a5c2a;padding:20px">⏳ Cargando datos...</p>';
 
   try {
-    const lista = await DB.getFecha(fechaActiva);
-    tbody.innerHTML = '';
+    const r    = await fetch(API_URL + '?ts=' + Date.now());
+    const rows = await r.json();
 
-    if (!lista.length) {
-      tbody.innerHTML =
-        '<tr><td colspan="10" class="vacio">Sin actividades para este día.</td></tr>';
-      return;
-    }
+    /* Agrupar por fecha dentro del rango */
+    const mapa = {};
+    rows.slice(1).forEach(row => {
+      const f = limpiarFecha(row[8]); /* col 5 = fecha */
+      if (f >= desde && f <= hasta) {
+        if (!mapa[f]) mapa[f] = [];
+        mapa[f].push({
+  id:          row[0],
+  nombre:      row[1],
+  puesto:      row[2],
+  municipio:   row[3],
 
-    lista.forEach(act => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td style="text-align:center;white-space:nowrap">
-          ${fmtHora(act.inicio)}</td>
-        <td style="text-align:center;white-space:nowrap">
-          ${fmtHora(act.termino)}</td>
-        <td>${act.nombre || '—'}</td>
-<td>${act.camioneta || '—'}</td>
-<td>${act.placa || '—'}</td>
-<td>${act.folio || '—'}</td>
-<td>${act.puesto || '—'}</td>
-<td>${act.municipio || '—'}</td>
-<td>${act.nucleo || '—'}</td>
-        <td style="text-align:center">
-          <span class="badge">${act.tipo || '—'}</span></td>
-        <td class="td-desc">${act.descripcion || '—'}</td>
-        <td>${act.resultado || '—'}</td>
-        <td style="text-align:center">
-          <button class="btn br"
-            onclick="eliminar('${act.id}')">✕</button></td>`;
-      tbody.appendChild(tr);
+  camioneta:   row[4],
+  placa:       row[5],
+  folio:       row[6],
+
+  nucleo:      row[7],
+  fecha:       row[8],
+  inicio:      row[9],
+  termino:     row[10],
+  tipo:        row[11],
+  descripcion: row[12],
+  resultado:   row[13],
+  timestamp:   row[14]
+});
+      }
     });
 
+    const dias = Object.keys(mapa).sort();
+    renderReporte(dias, mapa, desde, hasta);
+    history.replaceState(null,'',`?desde=${desde}&hasta=${hasta}`);
+
   } catch(e) {
-    tbody.innerHTML =
-      '<tr><td colspan="10" class="vacio">❌ Error al cargar. Revisa la conexión.</td></tr>';
-  }
-}
-
-function mostrarToast(mensaje) {
-  const toast = document.getElementById('toast');
-
-  toast.textContent = mensaje;
-  toast.classList.add('show');
-
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 2000);
-}
-/* ══════════════════════════════════════════════
-   ELIMINAR
-   ══════════════════════════════════════════════ */
-async function eliminar(id) {
-  if (!confirm('¿Eliminar esta actividad?')) return;
-  try {
-    const r   = await DB.delete(id);
-    const msg = document.getElementById('mensaje');
-    if (r.ok) {
-  mostrarToast('✅ Actividad eliminada correctamente');
-
-  await renderCal();
-  await renderTabla();
-}else {
-      alert(r.mensaje || 'No se pudo eliminar.');
-    }
-  } catch(e) {
-    alert('Error al eliminar. Revisa la conexión.');
+    document.getElementById('contenido').innerHTML =
+      '<div class="sin-res">❌ Error al cargar datos. Revisa la conexión.</div>';
   }
 }
 
 /* ══════════════════════════════════════════════
-   IMPRIMIR
+   RENDERIZAR
    ══════════════════════════════════════════════ */
-function irImprimir() {
-  const desde = document.getElementById('impDesde').value;
-  const hasta  = document.getElementById('impHasta').value;
-  if (!desde || !hasta) {
-    alert('Selecciona el rango de fechas.');
+function renderReporte(dias, mapa, desde, hasta) {
+
+  /* Totales */
+  let totalActs = 0;
+  const porTipo = {};
+  dias.forEach(f => {
+    mapa[f].forEach(a => {
+      totalActs++;
+      porTipo[a.tipo] = (porTipo[a.tipo]||0) + 1;
+    });
+  });
+
+  /* Título período */
+  const tit = document.getElementById('tituloPeriodo');
+  tit.textContent  = '📅 Período: ' + labelCorto(desde) + ' — ' + labelCorto(hasta);
+  tit.style.display = 'block';
+
+  /* Tarjetas resumen */
+  const res = document.getElementById('resumen');
+  res.style.display = 'flex';
+  res.innerHTML = `
+    <div class="res-card">
+      <div class="num">${dias.length}</div>
+      <div class="lbl">Días con actividad</div>
+    </div>
+    <div class="res-card">
+      <div class="num">${totalActs}</div>
+      <div class="lbl">Total actividades</div>
+    </div>
+    ${Object.entries(porTipo).sort((a,b)=>b[1]-a[1]).map(([t,n])=>`
+    <div class="res-card">
+      <div class="num">${n}</div>
+      <div class="lbl">${t||'—'}</div>
+    </div>`).join('')}`;
+
+  /* Sin resultados */
+  if (!dias.length) {
+    document.getElementById('contenido').innerHTML = `
+      <div class="sin-res">
+        📭 No hay actividades en el período seleccionado.<br>
+        <small style="color:#aaa;display:block;margin-top:8px">
+          ${labelCorto(desde)} al ${labelCorto(hasta)}
+        </small>
+      </div>`;
     return;
   }
-  if (desde > hasta) {
-    alert('"Del" no puede ser mayor que "Al".');
-    return;
-  }
-  window.location.href = `imprimir.html?desde=${desde}&hasta=${hasta}`;
+
+  /* Bloques por día */
+  document.getElementById('contenido').innerHTML = dias.map(f => `
+    <div class="dia-bloque">
+      <div class="dia-titulo">
+        <span>📅 ${labelLargo(f)}</span>
+        <span class="conteo">
+          ${mapa[f].length} actividad${mapa[f].length!==1?'es':''}
+        </span>
+      </div>
+      <div class="twrap">
+        <table>
+          <thead>
+            <tr>
+              <th>INICIO</th>
+              <th>TÉRMINO</th>
+              <th>NOMBRE</th>
+              <th>CAMIONETA</th>
+<th>PLACA</th>
+<th>FOLIO</th>
+              <th>PUESTO</th>
+              <th>MUNICIPIO</th>
+              <th>NÚCLEO AGRARIO</th>
+              <th>ACTIVIDAD</th>
+              <th class="td-desc">DESCRIPCIÓN</th>
+              <th>RESULTADO</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${mapa[f].map(a=>`
+            <tr>
+  <td>${fmtHora(a.inicio)}</td>
+  <td>${fmtHora(a.termino)}</td>
+
+  <td>${a.nombre || '—'}</td>
+  <td>${a.camioneta || '—'}</td>
+  <td>${a.placa || '—'}</td>
+  <td>${a.folio || '—'}</td>
+
+  <td>${a.puesto || '—'}</td>
+  <td>${a.municipio || '—'}</td>
+  <td>${a.nucleo || '—'}</td>
+
+  <td><span class="badge">${a.tipo || '—'}</span></td>
+  <td>${a.descripcion || '—'}</td>
+  <td>${a.resultado || '—'}</td>
+</tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`).join('');
+
+  /* Pie de impresión */
+  document.getElementById('pieDate').textContent =
+    new Date().toLocaleDateString('es-MX',
+      {day:'2-digit',month:'long',year:'numeric'});
 }
 
 /* ══════════════════════════════════════════════
-   INIT
+   LEER PARÁMETROS DE URL
    ══════════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
-  fechaActiva = localStorage.getItem('pa_fecha') || fmtFecha(new Date());
+  const p     = new URLSearchParams(window.location.search);
+  const desde = p.get('desde') || '';
+  const hasta  = p.get('hasta')  || '';
   const hoy   = fmtFecha(new Date());
-  document.getElementById('impDesde').value = hoy;
-  document.getElementById('impHasta').value = hoy;
-  selDia(fechaActiva);
+
+  if (desde && hasta) {
+    document.getElementById('ctrlDesde').value = desde;
+    document.getElementById('ctrlHasta').value  = hasta;
+    cargarReporte();
+  } else {
+    /* Por defecto: mes actual */
+    const primerDia = new Date();
+    primerDia.setDate(1);
+    document.getElementById('ctrlDesde').value = fmtFecha(primerDia);
+    document.getElementById('ctrlHasta').value  = hoy;
+  }
 });
 </script>
 </body>
