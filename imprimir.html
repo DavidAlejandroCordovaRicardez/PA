@@ -251,7 +251,7 @@ async function cargarReporte() {
     /* Agrupar por fecha dentro del rango */
     const mapa = {};
     rows.slice(1).forEach(row => {
-      const f = limpiarFecha(row[8]); /* col 5 = fecha */
+      const f = limpiarFecha(row[7]); /* col 5 = fecha */
       if (f >= desde && f <= hasta) {
         if (!mapa[f]) mapa[f] = [];
         mapa[f].push({
@@ -262,16 +262,15 @@ async function cargarReporte() {
 
   camioneta:   row[4],
   placa:       row[5],
-  folio:       row[6],
 
-  nucleo:      row[7],
-  fecha:       row[8],
-  inicio:      row[9],
-  termino:     row[10],
-  tipo:        row[11],
-  descripcion: row[12],
-  resultado:   row[13],
-  timestamp:   row[14]
+  nucleo:      row[6],
+  fecha:       row[7],
+  inicio:      row[8],
+  termino:     row[9],
+  tipo:        row[10],
+  descripcion: row[11],
+  resultado:   row[12],
+  timestamp:   row[13]
 });
       }
     });
@@ -354,7 +353,6 @@ function renderReporte(dias, mapa, desde, hasta) {
               <th>NOMBRE</th>
               <th>CAMIONETA</th>
 <th>PLACA</th>
-<th>FOLIO</th>
               <th>PUESTO</th>
               <th>MUNICIPIO</th>
               <th>NÚCLEO AGRARIO</th>
@@ -372,7 +370,6 @@ function renderReporte(dias, mapa, desde, hasta) {
   <td>${a.nombre || '—'}</td>
   <td>${a.camioneta || '—'}</td>
   <td>${a.placa || '—'}</td>
-  <td>${a.folio || '—'}</td>
 
   <td>${a.puesto || '—'}</td>
   <td>${a.municipio || '—'}</td>
