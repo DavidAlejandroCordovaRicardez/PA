@@ -192,12 +192,6 @@
            placeholder="Ej: TC-1234-A">
   </div>
 </div>
-
-<div class="fr">
-  <label>Folio</label>
-  <input type="text" id="fFolio"
-         placeholder="Ej: PA-2026-001">
-</div>
       <div class="fr">
         <label>Tipo de Actividad <span style="color:red">*</span></label>
         <input type="text" id="fTipo"
@@ -308,7 +302,6 @@ async function guardarActividad() {
   const resultado = document.getElementById('fResultado').value.trim();
   const camioneta = document.getElementById('fCamioneta').value.trim();
   const placa     = document.getElementById('fPlaca').value.trim();
-  const folio     = document.getElementById('fFolio').value.trim();
 
   /* Validaciones */
   if (!nombre)           { mostrarToast('⚠ Escribe tu nombre completo.','err');           return; }
@@ -341,7 +334,6 @@ async function guardarActividad() {
     form.append('resultado',   resultado);
     form.append('camioneta', camioneta);
     form.append('placa', placa);
-    form.append('folio', folio);
 
     const r    = await fetch(API_URL, { method: 'POST', body: form });
     const data = await r.json();
