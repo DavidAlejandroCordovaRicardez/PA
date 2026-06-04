@@ -181,6 +181,48 @@
       + Agregar actividad
     </a>
   </div>
+  <div style="
+  background:#fff;
+  border:1px solid #ccc;
+  border-bottom:none;
+  padding:10px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+">
+
+  <input
+    type="text"
+    id="buscarNombre"
+    placeholder="🔍 Buscar por nombre..."
+    style="
+      flex:1;
+      min-width:220px;
+      padding:8px;
+      border:1px solid #ccc;
+      border-radius:6px;
+    "
+  >
+
+  <input
+    type="date"
+    id="buscarFecha"
+    style="
+      padding:8px;
+      border:1px solid #ccc;
+      border-radius:6px;
+    "
+  >
+
+  <button class="btn bv" onclick="buscarActividades()">
+    Buscar
+  </button>
+
+  <button class="btn bg" onclick="limpiarBusqueda()">
+    Limpiar
+  </button>
+
+</div>
   <div class="twrap">
     <table class="datos">
       <thead>
@@ -190,7 +232,6 @@
           <th>NOMBRE</th>
           <th>CAMIONETA</th>
           <th>PLACA</th>
-          <th>FOLIO</th>
           <th>PUESTO</th>
           <th>MUNICIPIO</th>
           <th>NÚCLEO</th>
@@ -250,7 +291,7 @@ const DB = {
     const rows = await this._todos();
     const out  = [];
     rows.slice(1).forEach(r => {
-      if (this._fecha(r[8]) === fecha) {
+      if (this._fecha(r[7]) === fecha) {
         out.push({
   id:          r[0],
   nombre:      r[1],
@@ -259,16 +300,16 @@ const DB = {
 
   camioneta:   r[4],
   placa:       r[5],
-  folio:       r[6],
 
-  nucleo:      r[7],
-  fecha:       this._fecha(r[8]),
-  inicio:      r[9],
-  termino:     r[10],
-  tipo:        r[11],
-  descripcion: r[12],
-  resultado:   r[13],
-  timestamp:   r[14]
+
+  nucleo:      r[6],
+  fecha:       this._fecha(r[7]),
+  inicio:      r[8],
+  termino:     r[9],
+  tipo:        r[10],
+  descripcion: r[11],
+  resultado:   r[12],
+  timestamp:   r[13]
 });
       }
     });
@@ -279,7 +320,7 @@ const DB = {
     const rows = await this._todos();
     const set  = new Set();
     rows.slice(1).forEach(r => {
-      const f = this._fecha(r[8]);
+      const f = this._fecha(r[7]);
       if (f) set.add(f);
     });
     return [...set];
@@ -420,7 +461,6 @@ async function renderTabla() {
         <td>${act.nombre || '—'}</td>
 <td>${act.camioneta || '—'}</td>
 <td>${act.placa || '—'}</td>
-<td>${act.folio || '—'}</td>
 <td>${act.puesto || '—'}</td>
 <td>${act.municipio || '—'}</td>
 <td>${act.nucleo || '—'}</td>
@@ -487,7 +527,124 @@ function irImprimir() {
   }
   window.location.href = `imprimir.html?desde=${desde}&hasta=${hasta}`;
 }
+async function buscarActividades() {
 
+  const nombreBuscado =
+    document.getElementById('buscarNombre')
+      .value
+      .trim()
+      .toLowerCase();
+
+  const fechaBuscada =
+    document.getElementById('buscarFecha').value;
+
+  const tbody = document.getElementById('tablaBody');
+
+  tbody.innerHTML =
+    '<tr><td colspan="12" class="cargando">⏳ Buscando...</td></tr>';
+
+  try {
+
+    const rows = await DB._todos();
+
+    const resultados = [];
+
+    rows.slice(1).forEach(r => {
+
+      const nombre = String(r[1] || '').toLowerCase();
+      const fecha  = DB._fecha(r[7]);
+
+      const coincideNombre =
+        !nombreBuscado || nombre.includes(nombreBuscado);
+
+      const coincideFecha =
+        !fechaBuscada || fecha === fechaBuscada;
+
+      if (coincideNombre && coincideFecha) {
+
+        resultados.push({
+          id:r[0],
+          nombre:r[1],
+          puesto:r[2],
+          municipio:r[3],
+          camioneta:r[4],
+          placa:r[5],
+          nucleo:r[6],
+          fecha:fecha,
+          inicio:r[8],
+          termino:r[9],
+          tipo:r[10],
+          descripcion:r[11],
+          resultado:r[12]
+        });
+
+      }
+
+    });
+
+    tbody.innerHTML = '';
+
+    if (!resultados.length) {
+      tbody.innerHTML =
+        '<tr><td colspan="12" class="vacio">No se encontraron resultados.</td></tr>';
+      return;
+    }
+
+    resultados.forEach(act => {
+
+      const tr = document.createElement('tr');
+
+      tr.innerHTML = `
+        <td>${fmtHora(act.inicio)}</td>
+        <td>${fmtHora(act.termino)}</td>
+        <td>${act.nombre || '—'}</td>
+        <td>${act.camioneta || '—'}</td>
+        <td>${act.placa || '—'}</td>
+        <td>${act.puesto || '—'}</td>
+        <td>${act.municipio || '—'}</td>
+        <td>${act.nucleo || '—'}</td>
+        <td><span class="badge">${act.tipo || '—'}</span></td>
+        <td>${act.descripcion || '—'}</td>
+        <td>${act.resultado || '—'}</td>
+        <td>
+          <button class="btn br"
+            onclick="eliminar('${act.id}')">
+            ✕
+          </button>
+        </td>
+      `;
+
+      tbody.appendChild(tr);
+
+    });
+
+  } catch (e) {
+
+    tbody.innerHTML =
+      '<tr><td colspan="12" class="vacio">Error al buscar.</td></tr>';
+
+  }
+}
+
+function limpiarBusqueda() {
+
+  document.getElementById('buscarNombre').value = '';
+  document.getElementById('buscarFecha').value = '';
+
+  renderTabla();
+
+}
+
+document.addEventListener('input', (e) => {
+
+  if (
+    e.target.id === 'buscarNombre' ||
+    e.target.id === 'buscarFecha'
+  ) {
+    buscarActividades();
+  }
+
+});
 /* ══════════════════════════════════════════════
    INIT
    ══════════════════════════════════════════════ */
